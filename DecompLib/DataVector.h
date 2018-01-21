@@ -11,8 +11,6 @@
 *******************************************************************************/
 #ifndef DECOMPLIB_DATAVECTOR_H
 #define DECOMPLIB_DATAVECTOR_H
-#include"TmpUtility.h"
-
 /*!
  * @class DataVector
  * @brief A representation of the vector of data that is the object of the decomposition
@@ -21,18 +19,16 @@
  * @tparam ParamType The floating point type for which this calculation will be carried out
  * @tparam SimdAlign The alignment in bytes needed for any SIMD intrinsics that will be used. Values not in the set 16, 32, 64 will result in default allocation.
  */
-template<typename ParamType, int SimdAlign = 16>
+template<typename ParamType>
 class DataVector
 {
 public:
-    const int Alignment = SimdAlign; ///< A constant for other classes to check their SIMD Alignment against
-
     /*!
      * \brief DataVector Constructor
      * \param length, the number of values in the vector
      */
-    DataVector(int length) : size(length), vec(nullptr){vec = Detail::AllocSelect<ParamType, SimdAlign>(size);}
-    ~DataVector(){Detail::ReleaseArraySelect<ParamType, SimdAlign>(vec);}
+    DataVector(int length) : size(length), vec(new ParamType[length]){}
+    ~DataVector(){delete[] vec;}
 
     /*!
      * \brief setElement places a given value into a specific index in the vector
@@ -81,8 +77,8 @@ private:
     ParamType* vec; ///<The data vector itself
 }
 
-template<typename ParamType, int SimdAlign>
-bool DataVector<ParamType, SimdAlign>::isSafe()
+template<typename ParamType>
+bool DataVector<ParamType>::isSafe()
 {
     //use kahan summation to check that the vector is non-zero
     ParamType sum = 0.0;

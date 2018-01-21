@@ -23,18 +23,16 @@
  * @tparam ParamType The floating point type for which this calculation will be carried out
  * @tparam SimdAlign The alignment in bytes needed for any SIMD intrinsics that will be used. Values not in the set 16, 32, 64 will result in default allocation.
  */
-template<typename ParamType, int SimdAlign = 16>
+template<typename ParamType>
 class DecompVector
 {
 public:
-    const int Alignment = SimdAlign; ///< A constant for other classes to check their SIMD Alignment against
-
     /*!
      * \brief DecompVector Constructor
      * \param length, the number of values in the vector
      */
-    DecompVector(int length) : size(length), vec(nullptr){vec = Detail::AllocSelect<ParamType, SimdAlign>(size);}
-    ~DecompVector(){Detail::ReleaseArraySelect<ParamType, SimdAlign>(vec);}
+    DecompVector(int length) : size(length), vec(new ParamType[length]){}
+    ~DecompVector(){delete[] vec;}
 
     /*!
      * \brief setElement places a given value into a specific index in the vector
@@ -71,7 +69,7 @@ public:
      * \param val The data vector that this decomp vector should be initialized from,
      * the length of this vector should be greater than or equal to the length of this vector
      */
-    void initWithDataVector(const DataVector<ParamType, SimdAlign>& val);
+    void initWithDataVector(const DataVector<ParamType>& val);
 
     /*!
      * \brief getRawDataPtr gives access to the underlying vector pointer
@@ -95,8 +93,8 @@ private:
     ParamType* vec; ///<The data vector itself
 }
 
-template<typename ParamType, int SimdAlign>
-void DecompVector<ParamType, SimdAlign>::initWithDataVector(const DataVector<ParamType, SimdAlign>& val)
+template<typename ParamType>
+void DecompVector<ParamType>::initWithDataVector(const DataVector<ParamType>& val)
 {
     int valSize = val.getLength();
     assert(valSize >= size);
@@ -116,8 +114,8 @@ void DecompVector<ParamType, SimdAlign>::initWithDataVector(const DataVector<Par
     }
 }
 
-template<typename ParamType, int SimdAlign>
-void DecompVector<ParamType, SimdAlign>::initWithConstant(const ParamType& val)
+template<typename ParamType>
+void DecompVector<ParamType>::initWithConstant(const ParamType& val)
 {
     for(int i=0; i<size; ++i)
     {
@@ -125,8 +123,8 @@ void DecompVector<ParamType, SimdAlign>::initWithConstant(const ParamType& val)
     }
 }
 
-template<typename ParamType, int SimdAlign>
-bool DecompVector<ParamType, SimdAlign>::isSafe()
+template<typename ParamType>
+bool DecompVector<ParamType>::isSafe()
 {
     for(int i=0; i<size; ++i)
     {
