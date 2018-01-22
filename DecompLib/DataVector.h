@@ -88,7 +88,7 @@ bool DataVector<ParamType>::isSafe()
         if(vec[i] < static_cast<ParamType>(0.0)) return false; // here we have a negative value so we have failed
         ParamType compInput = (vec[i] - comp);
         ParamType tempSum = (sum + compInput);
-        comp = ((tempSum - sum) - y);
+        comp = ((tempSum - sum) - compInput);
         sum = tempSum;
     }
     if(sum <= static_cast<ParamType>(0.0)) return false; //if we made it here then we have a zero vector

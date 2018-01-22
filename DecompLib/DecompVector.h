@@ -68,8 +68,10 @@ public:
      * \brief initWithDataVector initializes this vector by compressing a DataVector
      * \param val The data vector that this decomp vector should be initialized from,
      * the length of this vector should be greater than or equal to the length of this vector
+     * \param factor A factor to multiply the values from the data vector by
+     * \param offset An offset to add to the values from the data vector
      */
-    void initWithDataVector(const DataVector<ParamType>& val);
+    void initWithDataVector(const DataVector<ParamType>& val, const ParamType& factor, const ParamType& offset);
 
     /*!
      * \brief getRawDataPtr gives access to the underlying vector pointer
@@ -94,7 +96,7 @@ private:
 }
 
 template<typename ParamType>
-void DecompVector<ParamType>::initWithDataVector(const DataVector<ParamType>& val)
+void DecompVector<ParamType>::initWithDataVector(const DataVector<ParamType>& val, const ParamType& factor, const ParamType& offset)
 {
     int valSize = val.getLength();
     assert(valSize >= size);
@@ -104,11 +106,11 @@ void DecompVector<ParamType>::initWithDataVector(const DataVector<ParamType>& va
         index = static_cast<int>(i*stepSize);
         if(index < valSize)
         {
-            vec[i] = val.getElement(index);
+            vec[i] = ((factor*val.getElement(index))+offset);
         }
         else
         {
-            vec[i] = val.getElement(valSize-1);
+            vec[i] = ((factor*val.getElement(valSize-1))+offset);
         }
         
     }
