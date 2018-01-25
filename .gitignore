@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+convert1d
+convert2d
+
+# Root Data Files
+*.root
