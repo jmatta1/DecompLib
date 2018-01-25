@@ -1,0 +1,10 @@
+ROOT_FLAGS=`root-config --cflags --libs`
+CPP_FLAGS=-O3 -g -march=native -mtune=native -fstrict-aliasing
+#CPP_FLAGS= -g -march=native -mtune=native
+
+decompose: main.cpp
+	g++ ${CPP_FLAGS} ${ROOT_FLAGS} main.cpp -o convert2d
+
+.PHONY:clean
+clean:
+	rm convert2d
