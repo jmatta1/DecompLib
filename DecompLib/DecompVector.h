@@ -13,6 +13,7 @@
 #define DECOMPLIB_DECOMPVECTOR_H
 #include<cassert>
 #include"DataVector.h"
+#include<iostream>
 
 /*!
  * @class DecompVector
@@ -70,7 +71,7 @@ public:
      * \param factor A factor to multiply the values from the data vector by
      * \param offset An offset to add to the values from the data vector
      */
-    void initWithDataVector(const DataVector<ParamType>& val, const ParamType& factor, const ParamType& offset);
+    void initWithDataVector(const DataVector<ParamType>& val, const ParamType& factor, const ParamType& offset = 0.0);
 
     /*!
      * \brief getRawDataPtr gives access to the underlying vector pointer
@@ -106,10 +107,12 @@ void DecompVector<ParamType>::initWithDataVector(const DataVector<ParamType>& va
         if(index < valSize)
         {
             vec[i] = ((factor*val.getElement(index))+offset);
+            if(vec[i] < static_cast<ParamType>(0.0)) std::cout<<"nvv: "<<val.getElement(index)<<", "<<vec[i]<<std::endl;
         }
         else
         {
             vec[i] = ((factor*val.getElement(valSize-1))+offset);
+            if(vec[i] < static_cast<ParamType>(0.0)) std::cout<<" negative vector value"<<std::endl;
         }
         
     }
@@ -127,13 +130,15 @@ void DecompVector<ParamType>::initWithConstant(const ParamType& val)
 template<typename ParamType>
 bool DecompVector<ParamType>::isSafe()
 {
+    bool output = true;
     for(int i=0; i<size; ++i)
     {
-        if(vec[i] < static_cast<ParamType>(0.0)) return false; // here we have a negative value so we have failed
+        //std::cout<<i<<", "<<vec[i]<<std::endl;
+        if(vec[i] < static_cast<ParamType>(0.0)) output = false; // here we have a negative value so we have failed
     }
     
     //if we made it to here then all the parameters are greater than zero
-    return true;
+    return output;
 }
 
 #endif //DECOMPLIB_DECOMPVECTOR_H

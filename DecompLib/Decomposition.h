@@ -17,6 +17,36 @@
 #include"RespMatrix.h"
 
 /*!
+ * \brief checkConvergence tests if two parameter sets vary more than convThresh
+ * \param oldVals The array of parameters at the beginning of the current iteration
+ * \param newVals The array of parameters at the end of the current iteration
+ * \param minThresh The value that causes a parameter to be ignored if both the
+ * old and new val sets have a parameter whose value is below minThresh it is not
+ * considered for determining convergence
+ * \param convThresh The maximum fractional change allowed before a pair of
+ * parameters are considered un-converged
+ */
+template<typename ParamType>
+bool checkConvergence(ParamType* oldVals, ParamType* newVals, int numRespFuncs,
+                      ParamType minThresh, ParamType convThresh)
+{
+    for(int i=0; i<numRespFuncs; ++i)
+    {
+        if(newVals[i] < minThresh && oldVals[i] < minThresh)
+        {
+            continue;
+        }
+        ParamType frac = ((newVals[i]-oldVals[i])/((oldVals[i]+newVals[i])/2.0));
+        if (frac < 0.0) frac = -frac;
+        if(frac > convThresh)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+/*!
  * \brief Performs a decomposition of data using respMatrix and the initial guess in paramSet, it then outputs the result in paramSet
  * \param data A vector with the spectrum to be decomposed
  * \param respMatrix The response matrix to use to decompose the data spectrum
@@ -32,7 +62,7 @@
  * analysis of beta-decay total absorption spectra, NIMA 571 (3) (2007) 728-738"
  */
 template<typename ParamType>
-long long performDecomposition(DataVector<ParamType>& data, RespMat<ParamType>& respMatrix,
+long long performDecomposition(DataVector<ParamType>& data, RespMatrix<ParamType>& respMatrix,
                                DecompVector<ParamType>& paramSet, ParamType minThresh = 1.0e-6,
                                ParamType convThresh = 0.005)
 {
@@ -44,14 +74,14 @@ long long performDecomposition(DataVector<ParamType>& data, RespMat<ParamType>& 
     for(int i=0; i<numRespFunc; ++i)
     {
         newVals[i] = 1.0e-32;
-        oldVals[i] = init.getElement(i);
+        oldVals[i] = paramSet.getElement(i);
     }
     //check to make sure the inputs are safe
     if(!respMatrix.isSafe())
     {
         return -1;// a row or column of the response matrix contains all zeros
     }
-    if(!init.isSafe())
+    if(!paramSet.isSafe())
     {
         return -2;//initial guess may have one or more values that are less than or equal to zero
     }
@@ -86,7 +116,7 @@ long long performDecomposition(DataVector<ParamType>& data, RespMat<ParamType>& 
             {
                 denom += oldVals[k]*respMatTr[offset+k];
             }
-            mults[j] = data[j]/denom;
+            mults[j] = data.getElement(j)/denom;
         }
         //calculate vector resp function multipliers
         for(int j=0; j<numRespFunc; ++j)
@@ -119,36 +149,6 @@ long long performDecomposition(DataVector<ParamType>& data, RespMat<ParamType>& 
     delete[] mults;
     delete[] products;
     return i;
-}
-
-/*!
- * \brief checkConvergence tests if two parameter sets vary more than convThresh
- * \param oldVals The array of parameters at the beginning of the current iteration
- * \param newVals The array of parameters at the end of the current iteration
- * \param minThresh The value that causes a parameter to be ignored if both the
- * old and new val sets have a parameter whose value is below minThresh it is not
- * considered for determining convergence
- * \param convThresh The maximum fractional change allowed before a pair of
- * parameters are considered un-converged
- */
-template<typename ParamType>
-bool checkConvergence(ParamType* oldVals, ParamType* newVals, int numRespFuncs,
-                      ParamType minThresh, ParamType convThresh)
-{
-    for(int i=0; i<numRespFuncs; ++i)
-    {
-        if(newVals[i] < minThresh && oldVals[i] < minThresh)
-        {
-            continue;
-        }
-        ParamType frac = ((newVals[i]-oldVals[i])/((oldVals[i]+newVals[i])/2.0));
-        if (frac < 0.0) frac = -frac;
-        if(frac > convThresh)
-        {
-            return false;
-        }
-    }
-    return true;
 }
 
 #endif //DECOMPLIB_DECOMPOSITION_H

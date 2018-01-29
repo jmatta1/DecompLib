@@ -11,6 +11,7 @@
 *******************************************************************************/
 #ifndef DECOMPLIB_RESPMATRIX_H
 #define DECOMPLIB_RESPMATRIX_H
+#include<cassert>
 #include<iostream>
 #include"DataVector.h"
 #include"DecompVector.h"
@@ -35,7 +36,7 @@ public:
      */
     RespMatrix(int numFunctions, int numRespCells) : numFunc(numFunctions),
         respLen(numRespCells), matrix(new ParamType[numFunc*respLen]),
-        transpose(new ParamType[numFunc*respLen]), summedRows(new ParamType[numFunc]){}
+        transpose(new ParamType[numFunc*respLen]), summedRows(new ParamType[numFunc]){assert(numFunctions>0);assert(numRespCells>0);}
     ~RespMatrix(){delete[] matrix; delete[] transpose; delete[] summedRows;}
     
     /*!
