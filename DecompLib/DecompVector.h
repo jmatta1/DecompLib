@@ -12,7 +12,6 @@
 #ifndef DECOMPLIB_DECOMPVECTOR_H
 #define DECOMPLIB_DECOMPVECTOR_H
 #include<cassert>
-#include"TmpUtility.h"
 #include"DataVector.h"
 
 /*!
@@ -93,7 +92,7 @@ public:
 private:
     int size; ///<The number of cells in the input data vector
     ParamType* vec; ///<The data vector itself
-}
+};
 
 template<typename ParamType>
 void DecompVector<ParamType>::initWithDataVector(const DataVector<ParamType>& val, const ParamType& factor, const ParamType& offset)

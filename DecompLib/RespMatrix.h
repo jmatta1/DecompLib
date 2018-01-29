@@ -12,7 +12,6 @@
 #ifndef DECOMPLIB_RESPMATRIX_H
 #define DECOMPLIB_RESPMATRIX_H
 #include<iostream>
-#include"TmpUtility.h"
 #include"DataVector.h"
 #include"DecompVector.h"
 
@@ -60,6 +59,20 @@ public:
     ParamType getElement(int funcNum, int respInd)
     {
         return matrix[funcNum*respLen+respInd];
+    }
+    
+     /*!
+     * \brief getElementTranspose returns the value of the transpose at the specified cell
+     * \param funcNum The index of the response function whose value is being set
+     * \param respInd The index within the response function that is being set
+     * \return The value of the matrix in the specified location
+     * 
+     * This is the same as get element but allows row major traversal even with
+     * iterating on function number faster than response index
+     */
+    ParamType getElementTranspose(int funcNum, int respInd)
+    {
+        return transpose[respInd*respLen+funcNum];
     }
 
     /*!
@@ -118,7 +131,7 @@ private:
     ParamType* matrix; ///<The response matrix
     ParamType* transpose; ///<The transpose of the response matrix
     ParamType* summedRows; ///<The vector that results when each row of the matrix is summed independently
-}
+};
 
 template<typename ParamType>
 bool RespMatrix<ParamType>::calculateSummedRows()

@@ -75,7 +75,7 @@ public:
 private:
     int size; ///<The number of cells in the input data vector
     ParamType* vec; ///<The data vector itself
-}
+};
 
 template<typename ParamType>
 bool DataVector<ParamType>::isSafe()
