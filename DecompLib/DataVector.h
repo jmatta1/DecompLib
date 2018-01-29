@@ -46,13 +46,13 @@ public:
      * 
      * \remark if index is negative or greater than the length of the vector, behavior is undefined
      */
-    ParamType getElement(int index){return vec[index];}
+    ParamType getElement(int index) const{return vec[index];}
 
     /*!
      * \brief getLength gets the size of the vector
      * \return The number of cells in the vector
      */
-    int getLength(){return size;}
+    int getLength() const{return size;}
 
     /*!
      * \brief getRawDataPtr gives access to the underlying vector pointer

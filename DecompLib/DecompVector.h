@@ -49,13 +49,13 @@ public:
      * 
      * \remark if index is negative or greater than the length of the vector, behavior is undefined
      */
-    ParamType getElement(int index){return vec[index];}
+    ParamType getElement(int index) const{return vec[index];}
 
     /*!
      * \brief getLength gets the size of the vector
      * \return The number of cells in the vector
      */
-    int getLength(){return size;}
+    int getLength() const{return size;}
 
     /*!
      * \brief initWithConstant initializes this vector with a constant parameter
@@ -102,7 +102,7 @@ void DecompVector<ParamType>::initWithDataVector(const DataVector<ParamType>& va
     ParamType stepSize = static_cast<ParamType>(valSize) / static_cast<ParamType>(size);
     for(int i=0; i<size; ++i)
     {
-        index = static_cast<int>(i*stepSize);
+        int index = static_cast<int>(i*stepSize);
         if(index < valSize)
         {
             vec[i] = ((factor*val.getElement(index))+offset);

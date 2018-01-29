@@ -35,7 +35,7 @@ public:
      */
     RespMatrix(int numFunctions, int numRespCells) : numFunc(numFunctions),
         respLen(numRespCells), matrix(new ParamType[numFunc*respLen]),
-        matrix(new ParamType[numFunc*respLen]), summedRows(new ParamType[numFunc]){}
+        transpose(new ParamType[numFunc*respLen]), summedRows(new ParamType[numFunc]){}
     ~RespMatrix(){delete[] matrix; delete[] transpose; delete[] summedRows;}
     
     /*!
@@ -56,7 +56,7 @@ public:
      * \param respInd The index within the response function that is being set
      * \return The value of the matrix in the specified location
      */
-    ParamType getElement(int funcNum, int respInd)
+    ParamType getElement(int funcNum, int respInd) const
     {
         return matrix[funcNum*respLen+respInd];
     }
@@ -70,7 +70,7 @@ public:
      * This is the same as get element but allows row major traversal even with
      * iterating on function number faster than response index
      */
-    ParamType getElementTranspose(int funcNum, int respInd)
+    ParamType getElementTranspose(int funcNum, int respInd) const
     {
         return transpose[respInd*respLen+funcNum];
     }
@@ -79,13 +79,13 @@ public:
      * \brief getNumRespFuncs returns the number of response functions in the matrix
      * \return The number of response functions in the matrix
      */
-    int getNumRespFuncs(){return numFunc;}
+    int getNumRespFuncs() const{return numFunc;}
     
     /*!
      * \brief getNumRespFuncs returns the length of each response function in the matrix
      * \return The length of the response functions in the matrix
      */
-    int getRespFuncsLens(){return respLen;}
+    int getRespFuncsLens() const{return respLen;}
 
     /*!
      * \brief getMatrixPtr gives access to the underlying matrix pointer
@@ -134,7 +134,7 @@ private:
 };
 
 template<typename ParamType>
-bool RespMatrix<ParamType>::calculateSummedRows()
+void RespMatrix<ParamType>::calculateSummedRows()
 {
     for(int i=0; i<numFunc; ++i)
     {
@@ -147,7 +147,7 @@ bool RespMatrix<ParamType>::calculateSummedRows()
             ParamType compInput = (matrix[j] - comp);
             ParamType tempSum = (summedRows[i] + compInput);
             comp = ((tempSum - summedRows[i]) - compInput);
-            summedRows[i] += respMat[j];
+            summedRows[i] += matrix[j];
         }
     }
 }
