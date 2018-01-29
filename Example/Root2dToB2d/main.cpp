@@ -2,7 +2,10 @@
 #include<TH2.h>
 #include<iostream>
 #include<fstream>
-
+int getStartingRow();
+int getStoppingRow();
+int getStartingColumn();
+int getStoppingColumn();
 int main(int argc, char* argv[])
 {
     if(argc != 4)
@@ -18,15 +21,20 @@ int main(int argc, char* argv[])
     std::cout<<"Retrieving TH2 Named: "<<argv[2]<<std::endl;
     TH1* hist = (TH2*)file->Get(argv[2]);
     std::cout<<"Outputting 2D Hist to Binary File: "<<argv[3]<<std::endl;
-    int histSizeX = hist->GetNbinsX();
-    int histSizeY = hist->GetNbinsY();
+    int startY = getStartingRow();
+    int stopY = getStoppingRow();
+    int startX = getStartingColumn();
+    int stopX = getStoppingColumn();
+    int histSizeX = (stopX-startX+1);
+    int histSizeY = (stopY-startY+1);
     char* outArray = new char[sizeof(int)*2+sizeof(double)*histSizeX*histSizeY];
     *(reinterpret_cast<int*>(outArray)) = histSizeX;
     int index = sizeof(int);
     *(reinterpret_cast<int*>(outArray+index)) = histSizeY;
-    for(int i=1; i<=histSizeY; ++i)
+    index += sizeof(int);
+    for(int i=startY; i<=stopY; ++i)
     {
-        for(int j=1; j<=histSizeX; ++j)
+        for(int j=startX; j<=stopX; ++j)
         {
             *(reinterpret_cast<double*>(outArray+index)) = hist->GetBinContent(j, i);
             index += sizeof(double);
@@ -40,4 +48,56 @@ int main(int argc, char* argv[])
     delete hist;
     delete file;
     std::cout<<"Done"<<std::endl;
+}
+int getStartingRow()
+{
+    std::cout<<"\nGive the starting row of the input histogram: "<<std::endl;
+    int val = -1;
+    std::cin>>val;
+    while(val<0)
+    {
+        std::cout<<"  Negative values are not allowed"<<std::endl;
+        std::cout<<"  Give the starting row of the output: "<<std::endl;
+        std::cin>>val;
+    }
+    return val;
+}
+int getStoppingRow()
+{
+    std::cout<<"\nGive the stopping row of the input histogram: "<<std::endl;
+    int val = -1;
+    std::cin>>val;
+    while(val<0)
+    {
+        std::cout<<"  Negative values are not allowed"<<std::endl;
+        std::cout<<"  Give the stopping row of the input histogram: "<<std::endl;
+        std::cin>>val;
+    }
+    return val;
+}
+int getStartingColumn()
+{
+    std::cout<<"\nGive the starting column of the input histogram: "<<std::endl;
+    int val = -1;
+    std::cin>>val;
+    while(val<0)
+    {
+        std::cout<<"  Negative values are not allowed"<<std::endl;
+        std::cout<<"  Give the starting row of the input histogram: "<<std::endl;
+        std::cin>>val;
+    }
+    return val;
+}
+int getStoppingColumn()
+{
+    std::cout<<"\nGive the stopping column of the input histogram: "<<std::endl;
+    int val = -1;
+    std::cin>>val;
+    while(val<0)
+    {
+        std::cout<<"  Negative values are not allowed"<<std::endl;
+        std::cout<<"  Give the stopping row of the input histogram: "<<std::endl;
+        std::cin>>val;
+    }
+    return val;
 }
