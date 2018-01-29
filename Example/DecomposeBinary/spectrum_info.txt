@@ -1,0 +1,14 @@
+sample_input_spectrum.b1d
+-------------------------------------------------
+X-axis - Number Bins: 3049 (bins 1 to 3049 of the original root TH2's 1 to 3200 (5 keV per Bin))
+X-axis - First Bin Low Edge:  0.0025 MeV
+X-axis - Last Bin High Edge: 15.2475 MeV
+
+sample_response_matrix.b2d
+-------------------------------------------------
+X-axis - Number Bins: 3049 (bins 1 to 3049 of the original root TH2's 1 to 3200 (5 keV per Bin))
+X-axis - First Bin Low Edge:  0.0025 MeV
+X-axis - Last Bin High Edge: 15.2475 MeV
+Y-axis - Number Bins: 1496 (bins 5 to 1500 of the original root TH2's 1 to 1500 (10 keV per Bin))
+Y-axis - First Bin Low Edge:  0.045 MeV
+Y-axis - Last Bin High Edge: 15.005 MeV
