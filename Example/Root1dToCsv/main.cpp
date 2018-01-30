@@ -17,21 +17,24 @@ int main(int argc, char* argv[])
     TFile* file = new TFile(argv[1]);
     std::cout<<"Retrieving TH1 Named: "<<argv[2]<<std::endl;
     TH1* hist = (TH1*)file->Get(argv[2]);
-    std::cout<<"Outputting Hist to Binary File: "<<argv[3]<<std::endl;
+    if(hist == nullptr)
+    {
+        std::cout<<"ERROR - Histogram does not exist in ROOT file"<<std::endl;
+        return 1;
+    }
+    std::cout<<"Outputting Hist to Csv File: "<<argv[3]<<std::endl;
     int histSize = hist->GetNbinsX();
-    char* outArray = new char[sizeof(int)+sizeof(double)*histSize];
-    *(reinterpret_cast<int*>(outArray)) = histSize;
-    int index = sizeof(int);
+    std::ofstream out(argv[3]);
+    double loBinEdge = hist->GetXaxis()->GetBinLowEdge(1);
+    double hiBinEdge = hist->GetXaxis()->GetBinLowEdge(histSize + 1);
+    out<<"#x-axis, nbins, first bin low edge, last bin high edge\n";
+    out<<histSize<<", "<<loBinEdge<<", "<<hiBinEdge;
+    out<<"\n# bin number, value";
     for(int i=1; i<=histSize; ++i)
     {
-        *(reinterpret_cast<double*>(outArray+index)) = hist->GetBinContent(i);
-        index += sizeof(double);
+        out<<"\n"<<(i-1)<<", "<<hist->GetBinContent(i);
     }
-    std::ofstream out;
-    out.open(argv[3],std::ios_base::binary);
-    out.write(outArray, index);
     out.close();
-    delete[] outArray;
     delete hist;
     delete file;
     std::cout<<"Done"<<std::endl;
