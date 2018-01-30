@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 {
     if(argc != 4)
     {
-        std::cout<<"A simple utility to write a specified ROOT TH1 into a binary file"<<std::endl;
+        std::cout<<"A simple utility to write a specified ROOT TH1 into a csv file"<<std::endl;
         std::cout<<"  Usage:\n    "<<argv[0]
                  <<" <inputRootFile> <inputTH1Name> <outputFileName>"
                  <<std::endl;
@@ -27,12 +27,12 @@ int main(int argc, char* argv[])
     std::ofstream out(argv[3]);
     double loBinEdge = hist->GetXaxis()->GetBinLowEdge(1);
     double hiBinEdge = hist->GetXaxis()->GetBinLowEdge(histSize + 1);
-    out<<"#x-axis, nbins, first bin low edge, last bin high edge\n";
-    out<<histSize<<", "<<loBinEdge<<", "<<hiBinEdge;
-    out<<"\n# bin number, value";
+    out<<"#X-axis: nbins, first bin low edge, last bin high edge\n";
+    out<<histSize<<", "<<loBinEdge<<", "<<hiBinEdge<<"\n";
+    out<<"# bin number, value\n";
     for(int i=1; i<=histSize; ++i)
     {
-        out<<"\n"<<(i-1)<<", "<<hist->GetBinContent(i);
+        out<<(i-1)<<", "<<hist->GetBinContent(i)<<"\n";
     }
     out.close();
     delete hist;
