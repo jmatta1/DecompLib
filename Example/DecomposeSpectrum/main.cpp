@@ -90,6 +90,9 @@ int main(int argc, char* argv[])
         std::cout << "Data vector may be all zeros, or contain one or more negative number" << std::endl;
         return 1;
     case -4:
+        std::cout << "One of the rows of the response matrix summed to zero"<<std::endl;
+        return 1;
+    case -5:
         std::cout << "During the element-wise multiplication and summing of one of the columns of\n"
                   << "the response matrix and the decomposition vector, all the terms were zero.\n"
                   << "This would give a zero in a denominator"<<std::endl;
@@ -117,7 +120,7 @@ int main(int argc, char* argv[])
     //write out the final decomposition
     namer << argv[3] << "_final.csv";
     name = namer.str();
-    std::cout<<"Writing the final decomposition values to: "<<name<<std::endl;
+    std::cout<<"  Writing the final decomposition values to: "<<name<<std::endl;
     writeDecompData(name, decompProc, decompMeta);
     namer.str("");
     namer.clear();
@@ -125,7 +128,7 @@ int main(int argc, char* argv[])
     DataVector<double>* sumSpectrum = calculateSumSpectrum(decompProc, *responseMatrix);
     namer << argv[3] << "_sum.csv";
     name = namer.str();
-    std::cout<<"Writing the fitted spectrum - calculated from decomposition values - to: "<<name<<std::endl;
+    std::cout<<"             Writing the fitted spectrum to: "<<name<<std::endl;
     writeSpectumData(name, *sumSpectrum, *spectrumMeta);
     namer.str("");
     namer.clear();
@@ -133,7 +136,7 @@ int main(int argc, char* argv[])
     DataVector<double>* residSpectrum = calculateResidSpectrum(*inputSpectrum, *sumSpectrum);
     namer << argv[3] << "_resid.csv";
     name = namer.str();
-    std::cout<<"Writing the fit residuals spectrum to: "<<name<<std::endl;
+    std::cout<<"      Writing the fit residuals spectrum to: "<<name<<std::endl;
     writeSpectumData(name, *residSpectrum, *spectrumMeta);
     
     delete residSpectrum;
