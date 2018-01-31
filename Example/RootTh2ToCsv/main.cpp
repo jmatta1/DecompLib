@@ -1,3 +1,14 @@
+/*!*****************************************************************************
+********************************************************************************
+**
+** @copyright Copyright (C) 2018 James Till Matta
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+** 
+********************************************************************************
+*******************************************************************************/
 #include<TFile.h>
 #include<TH2.h>
 #include<iostream>
@@ -30,6 +41,7 @@ int main(int argc, char* argv[])
     double loEdgeY = hist->GetYaxis()->GetBinLowEdge(1);
     double hiEdgeY = hist->GetYaxis()->GetBinLowEdge(histSizeX+1);
     std::ofstream out(argv[3]);
+    out<<"#Lines starting with a '#' in the first column are ignored\n";
     out<<"#X-axis: nbins, first bin low edge, last bin high edge\n";
     out<<histSizeX<<", "<<loEdgeX<<", "<<hiEdgeX<<"\n";
     out<<"#Y-axis: nbins, first bin low edge, last bin high edge\n";

@@ -1,3 +1,14 @@
+/*!*****************************************************************************
+********************************************************************************
+**
+** @copyright Copyright (C) 2018 James Till Matta
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+** 
+********************************************************************************
+*******************************************************************************/
 #include<TFile.h>
 #include<TH1.h>
 #include<iostream>
@@ -27,6 +38,7 @@ int main(int argc, char* argv[])
     std::ofstream out(argv[3]);
     double loBinEdge = hist->GetXaxis()->GetBinLowEdge(1);
     double hiBinEdge = hist->GetXaxis()->GetBinLowEdge(histSize + 1);
+    out<<"#Lines starting with a '#' in the first column are ignored\n";
     out<<"#X-axis: nbins, first bin low edge, last bin high edge\n";
     out<<histSize<<", "<<loBinEdge<<", "<<hiBinEdge<<"\n";
     out<<"# bin number, value\n";
