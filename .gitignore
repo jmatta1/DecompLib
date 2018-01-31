@@ -33,6 +33,7 @@
 convert1d
 convert2d
 Example/DecomposeSpectrum/decompose
+convertCsv
 
 # Decompressed response matrix
 Example/DecomposeSpectrum/sample_response_matrix.csv
