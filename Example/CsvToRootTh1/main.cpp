@@ -50,14 +50,21 @@ int main(int argc, char* argv[])
         converter>>cutOff;
     }
     //now create the root file and histogram
-    std::cout<<"            Creating ROOT File: "<<argv[2]<<std::endl;
+    std::cout<<"  Creating / Opening ROOT File: "<<argv[2]<<std::endl;
     TFile* file = new TFile(argv[2], "UPDATE");
     TH1D* hist = readCsvSpectrum(argv[1], argv[3], cutOff);
+    if(hist == nullptr)
+    {
+        std::cout<<"Input Csv file does not exist"<<std::endl;
+        delete file;
+        return 1;
+    }
     hist->Write();
     file->Flush();
     std::cout<<"Finished"<<std::endl;
     delete hist;
     delete file;
+    return 0;
 }
 
 TH1D* readCsvSpectrum(const std::string& fileName, const std::string& histName, double cutOff)
@@ -66,6 +73,10 @@ TH1D* readCsvSpectrum(const std::string& fileName, const std::string& histName, 
     std::cout<<"            Opening Input File: "<<fileName<<std::endl;
     std::ifstream input;
     input.open(fileName.c_str());
+    if(!(input.good()))
+    {
+        return nullptr;
+    }
     std::string line;
     //the first non comment line of a 1d csv is X axis information
     readAndIgnoreCommentLines(input, line);
