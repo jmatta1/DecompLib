@@ -91,6 +91,14 @@ long long performDecomposition(DataVector<ParamType>& data, RespMatrix<ParamType
     {
         return -3ULL;//data vector may be all zeros, or contain one or more negative number
     }
+    
+    const ParamType* respMat = respMatrix.getMatrixPtr();
+    // get the transpose of the response matrix
+    const ParamType* respMatTr = respMatrix.getTransposePtr();
+    // sum the rows of the response matrix and get a ptr to them
+    respMatrix.calculateSummedRows();
+    const ParamType* respSum = respMatrix.getSummedRowPtr();
+    // test the safety of the summed response rows
     for(int j=0; j<numRespFunc; ++j)
     {
         if(respSum[j] == 0.0)
@@ -98,13 +106,6 @@ long long performDecomposition(DataVector<ParamType>& data, RespMatrix<ParamType
             return -4ULL;//Response function row sums has a zero, which should not be possible with the other checks
         }
     }
-    
-    const ParamType* respMat = respMatrix.getMatrixPtr();
-    // get the transpose of the response matrix
-    const ParamType* respMatTr = respMatrix.getTransposePtr();
-    // sum the columns of the response matrix and get a ptr to them
-    respMatrix.calculateSummedRows();
-    const ParamType* respSum = respMatrix.getSummedRowPtr();
     // create the array of multipliers
     ParamType* mults = new ParamType[numDataBins];
     // create array of the product of mults and the resp mat
