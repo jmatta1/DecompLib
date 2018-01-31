@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
     TH1D* hist = readCsvSpectrum(argv[1], argv[3]);
     hist->Write();
     file->Flush();
+    std::cout<<"Finished"<<std::endl;
     delete hist;
     delete file;
 }
