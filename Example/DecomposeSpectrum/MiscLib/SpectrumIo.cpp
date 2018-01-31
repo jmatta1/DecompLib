@@ -42,9 +42,12 @@ std::tuple<RespMatrix<double>*, TwoDMetaData*> readResponseMatrix(const std::str
     while(lastLineGood)
     {
         lastLineGood = Detail::readAndIgnoreCommentLines(input, line);
-        if(!lastLineGood && (line.size() > 6))
+        if(line.size() <= 6) // skip lines that are too short to contain anything
         {
-            lastLineGood = false;
+            continue;
+        }
+        else if(!lastLineGood)
+        {
             break;
         }
         std::tie(respBinNum, funcNum, value) = Detail::parse2dDataLine(line);
@@ -80,9 +83,12 @@ std::tuple<DataVector<double>*, OneDMetaData*> readDataVector(const std::string&
     while(lastLineGood)
     {
         lastLineGood = Detail::readAndIgnoreCommentLines(input, line);
-        if(!lastLineGood && (line.size() > 3))
+        if(line.size() <= 3) // skip lines that are too short to contain anything
         {
-            lastLineGood = false;
+            continue;
+        }
+        else if(!lastLineGood)
+        {
             break;
         }
         std::tie(binNum, value) = Detail::parse1dDataLine(line);
