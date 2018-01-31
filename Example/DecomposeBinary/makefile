@@ -8,7 +8,7 @@
 #* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #* 
 #*******************************************************************************
-#******************************************************************************#
+#*******************************************************************************
 
 DECOMP_LIB_LOCATION_ABS=/home/jmatta1/code/DecompLib  # change this to the path in your system
 DECOMP_LIB_LOCATION_REL=../..
