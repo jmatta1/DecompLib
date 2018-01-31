@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
     {
         std::cout<<"A simple utility to write a 1D spectrum in csv format into a specified ROOT TH1"<<std::endl;
         std::cout<<"  Usage:\n    "<<argv[0]
-                 <<" <inputCsvFile> <outputRootFile> <outputTh1Name> [minCutoff]\n"
+                 <<" <inputCsvFile> <outputRootFile> <outputTh1Name> [minCutoff]\n\n"
                  <<"minCutoff is an optional parameter that specifies a value that\n"
                  <<"below which zero is entered into the histogram instead of the value\n"
                  <<"It defaults to 1.0e-10, and can be turned off entirely by passing\n"
