@@ -18,7 +18,7 @@
 #include<TH1.h>
 
 //reads a csv spectrum into a TH1D and returns a pointer to that histogram and the associated file
-TH1D* readCsvSpectrum(const std::string& fileName, const std::string& histName);
+TH1D* readCsvSpectrum(const std::string& fileName, const std::string& histName, double cutoff);
 //reads lines from the input stream until it finds a line that does not have '#' at index 0
 //if the next line is not a comment this is functionally identical to getline
 bool readAndIgnoreCommentLines(std::istream& input, std::string& str);
@@ -30,18 +30,29 @@ std::tuple<int, double> parse1dDataLine(const std::string& line);
 
 int main(int argc, char* argv[])
 {
-    if(argc != 4)
+    if(argc != 4 && argc != 5)
     {
         std::cout<<"A simple utility to write a 1D spectrum in csv format into a specified ROOT TH1"<<std::endl;
         std::cout<<"  Usage:\n    "<<argv[0]
-                 <<" <inputCsvFile> <outputRootFile> <outputTh1Name>"
+                 <<" <inputCsvFile> <outputRootFile> <outputTh1Name> [minCutoff]\n"
+                 <<"minCutoff is an optional parameter that specifies a value that\n"
+                 <<"below which zero is entered into the histogram instead of the value\n"
+                 <<"It defaults to 1.0e-10, and can be turned off entirely by passing\n"
+                 <<"a zero or negative value"
                  <<std::endl;
         return 1;
+    }
+    double cutOff = 1.0e-10;
+    if(argc == 5)
+    {
+        std::istringstream converter;
+        converter.str(argv[4]);
+        converter>>cutOff;
     }
     //now create the root file and histogram
     std::cout<<"            Creating ROOT File: "<<argv[2]<<std::endl;
     TFile* file = new TFile(argv[2], "UPDATE");
-    TH1D* hist = readCsvSpectrum(argv[1], argv[3]);
+    TH1D* hist = readCsvSpectrum(argv[1], argv[3], cutOff);
     hist->Write();
     file->Flush();
     std::cout<<"Finished"<<std::endl;
@@ -49,7 +60,7 @@ int main(int argc, char* argv[])
     delete file;
 }
 
-TH1D* readCsvSpectrum(const std::string& fileName, const std::string& histName)
+TH1D* readCsvSpectrum(const std::string& fileName, const std::string& histName, double cutOff)
 {
     //open the file and allocate the meta data system
     std::cout<<"            Opening Input File: "<<fileName<<std::endl;
@@ -80,7 +91,14 @@ TH1D* readCsvSpectrum(const std::string& fileName, const std::string& histName)
             break;
         }
         std::tie(binNum, value) = parse1dDataLine(line);
-        hist->SetBinContent(binNum+1, value);
+        if(value < cutOff)
+        {
+            hist->SetBinContent(binNum+1, 0.0);
+        }
+        else
+        {
+            hist->SetBinContent(binNum+1, value);
+        }
     }
     //now return the matrix and its meta data
     return hist;
