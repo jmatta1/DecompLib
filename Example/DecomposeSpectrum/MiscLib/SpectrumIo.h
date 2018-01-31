@@ -13,7 +13,6 @@
 #define DECOMPLIB_EXAMPLE_DECOMPOSEBINARY_SPECTRUMIO_H
 
 #include<tuple>
-#include<fstream>
 #include<string>
 
 #include"DecompLib/DataVector.h"

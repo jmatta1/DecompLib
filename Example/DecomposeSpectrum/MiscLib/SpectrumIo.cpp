@@ -10,6 +10,7 @@
 ********************************************************************************
 *******************************************************************************/
 #include"SpectrumIo.h"
+#include<fstream>
 #include<iostream>
 #include<sstream>
 #include"SimpleStructs.h"
@@ -39,6 +40,7 @@ std::tuple<RespMatrix<double>*, TwoDMetaData*> readResponseMatrix(const std::str
     int respBinNum;
     int funcNum;
     double value;
+    std::cout<<"Reading Response Matrix"<<std::endl;
     while(lastLineGood)
     {
         lastLineGood = Detail::readAndIgnoreCommentLines(input, line);

@@ -11,7 +11,7 @@
 #*******************************************************************************
 DECOMP_LIB_LOCATION_ABS=/home/jmatta1/code/DecompLib  # change this to the path in your system
 DECOMP_LIB_LOCATION_REL=../..
-CPP_FLAGS=-O3 --std=c++11 -march=native -mtune=native -fstrict-aliasing
+CPP_FLAGS=-O3 -g --std=c++11 -march=native -mtune=native
 DECOMP_LIB_FLAG=-I${DECOMP_LIB_LOCATION_REL}
 
 decompose: main.o MiscLib/UserIo.o MiscLib/SpectrumIo.o MiscLib/SpectrumCalculation.o
@@ -31,7 +31,7 @@ MiscLib/SpectrumCalculation.o: MiscLib/SpectrumCalculation.cpp MiscLib/SpectrumC
 
 .PHONY:clean
 clean:
-	-rm *.o
+	-rm *.o MiscLib/*.o
 
 .PHONY:cleanall
 cleanall:clean

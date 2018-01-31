@@ -45,11 +45,11 @@ int main(int argc, char* argv[])
     std::cout<<"  Initial Values Set To:\n";
     if(initValSetting == 0)
     {
-        std::cout<<"    Spectrum Scaled By: "<<startVal<<std::endl;
+        std::cout<<"    Spectrum Scaled By A Factor Of "<<startVal<<std::endl;
     }
     else
     {
-        std::cout<<"    Constant Value Set To: "<<startVal<<std::endl;
+        std::cout<<"    Constant Value Of "<<startVal<<std::endl;
     }
     //read the raw data
     DataVector<double>* inputSpectrum = nullptr;
@@ -74,6 +74,7 @@ int main(int argc, char* argv[])
     }
     
     //decompose
+    std::cout<<"Starting Decomposition"<<std::endl;
     long long retVal = performDecomposition(*inputSpectrum, *responseMatrix,
                                             decompProc, minThresh, convCrit);
     //tell the user about success or failure
