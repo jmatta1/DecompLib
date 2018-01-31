@@ -32,6 +32,10 @@
 *.app
 convert1d
 convert2d
+Example/DecomposeSpectrum/decompose
+
+# Decompressed response matrix
+Example/DecomposeSpectrum/sample_response_matrix.csv
 
 # Root Data Files
 *.root
