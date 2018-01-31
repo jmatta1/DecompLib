@@ -54,8 +54,10 @@ bool checkConvergence(ParamType* oldVals, ParamType* newVals, int numRespFuncs,
  * \param convThresh maximum fractional change between iterations allowed before parameters are considered unconverged defaults to 0.005
  * \return The number of iterations, or negative values for errors, -1 if a row
  *  or column of the response matrix contains all zeros, -2 if the initial parameter
- *  set has one or more values that are less than or equal to zero, and -3 if the
- *  data vector contains one or more negative numbers or it may all be zeros
+ *  set has one or more values that are less than or equal to zero, -3 if the
+ *  data vector contains one or more negative numbers or it may all be zeros, and
+ *  -4 for the case that a value in a denominator, from a product of response
+ *  matrix column and decomposition vector
  *
  * This function uses the algorithm in "J. Tain, D. Cano-Ott, Algorithms for the
  * analysis of beta-decay total absorption spectra, NIMA 571 (3) (2007) 728-738"
@@ -115,6 +117,7 @@ long long performDecomposition(DataVector<ParamType>& data, RespMatrix<ParamType
             {
                 denom += oldVals[k]*respMatTr[offset+k];
             }
+            if(denom == 0.0) return -4ULL;
             mults[j] = data.getElement(j)/denom;
         }
         //calculate vector resp function multipliers
