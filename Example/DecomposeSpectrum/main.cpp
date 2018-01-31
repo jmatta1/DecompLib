@@ -104,24 +104,32 @@ int main(int argc, char* argv[])
     //write out the starting point
     std::ostringstream namer;
     namer << argv[3] << "_init.csv";
-    writeDecompData(namer.str(), decompOrig, decompMeta);
+    std::string name = namer.str();
+    std::cout<<"Writing the initial decomposition values to: "<<name<<std::endl;
+    writeDecompData(name, decompOrig, decompMeta);
     namer.str("");
     namer.clear();
     //write out the final decomposition
     namer << argv[3] << "_final.csv";
-    writeDecompData(namer.str(), decompProc, decompMeta);
+    name = namer.str();
+    std::cout<<"Writing the final decomposition values to: "<<name<<std::endl;
+    writeDecompData(name, decompProc, decompMeta);
     namer.str("");
     namer.clear();
     //calculate and write the sum spectrum
     DataVector<double>* sumSpectrum = calculateSumSpectrum(decompProc, *responseMatrix);
     namer << argv[3] << "_sum.csv";
-    writeSpectumData(namer.str(), *sumSpectrum, *spectrumMeta);
+    name = namer.str();
+    std::cout<<"Writing the fitted spectrum - calculated from decomposition values - to: "<<name<<std::endl;
+    writeSpectumData(name, *sumSpectrum, *spectrumMeta);
     namer.str("");
     namer.clear();
     //calculate and write the residual spectrum
     DataVector<double>* residSpectrum = calculateResidSpectrum(*inputSpectrum, *sumSpectrum);
     namer << argv[3] << "_resid.csv";
-    writeSpectumData(namer.str(), *residSpectrum, *spectrumMeta);
+    name = namer.str();
+    std::cout<<"Writing the fit residuals spectrum to: "<<name<<std::endl;
+    writeSpectumData(name, *residSpectrum, *spectrumMeta);
     
     delete residSpectrum;
     delete sumSpectrum;
@@ -129,6 +137,7 @@ int main(int argc, char* argv[])
     delete responseMatrix;
     delete spectrumMeta;
     delete inputSpectrum;
+    std::cout<<"Finished"<<std::endl;
     return 0;
 }
 
