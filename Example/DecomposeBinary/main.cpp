@@ -2,11 +2,11 @@
 #include<string>
 #include<sstream>
 #include<tuple>
-#include"UserIo.h"
-#include"SpectrumIo.h"
-#include"SpectrumCalculation.h"
-#include"SimpleStructs.h"
 #include"DecompLib/Decomposition.h"
+#include"MiscLib/UserIo.h"
+#include"MiscLib/SpectrumIo.h"
+#include"MiscLib/SpectrumCalculation.h"
+#include"MiscLib/SimpleStructs.h"
 
 int main(int argc, char* argv[])
 {

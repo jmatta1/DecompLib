@@ -3,19 +3,19 @@ DECOMP_LIB_LOCATION_REL=../..
 CPP_FLAGS=-O3 -g --std=c++11 -march=native -mtune=native -fstrict-aliasing
 DECOMP_LIB_FLAG=-I${DECOMP_LIB_LOCATION_REL}
 
-decompose: main.o UserIo.o SpectrumIo.o SpectrumCalculation.o
+decompose: main.o MiscLib/UserIo.o MiscLib/SpectrumIo.o MiscLib/SpectrumCalculation.o
 	g++ ${CPP_FLAGS} ${DECOMP_LIB_FLAG} $^ -o $@
 
-main.o: main.cpp UserIo.h SpectrumIo.h SpectrumCalculation.h
+main.o: main.cpp MiscLib/UserIo.h MiscLib/SpectrumIo.h MiscLib/SpectrumCalculation.h
 	g++ -c ${CPP_FLAGS} ${DECOMP_LIB_FLAG} $< -o $@
 
-UserIo.o: UserIo.cpp UserIo.h
+MiscLib/UserIo.o: MiscLib/UserIo.cpp MiscLib/UserIo.h
 	g++ -c ${CPP_FLAGS} ${DECOMP_LIB_FLAG} $< -o $@
 
-SpectrumIo.o: SpectrumIo.cpp SpectrumIo.h
+MiscLib/SpectrumIo.o: MiscLib/SpectrumIo.cpp MiscLib/SpectrumIo.h
 	g++ -c ${CPP_FLAGS} ${DECOMP_LIB_FLAG} $< -o $@
 
-SpectrumCalculation.o: SpectrumCalculation.cpp SpectrumCalculation.h
+MiscLib/SpectrumCalculation.o: MiscLib/SpectrumCalculation.cpp MiscLib/SpectrumCalculation.h
 	g++ -c ${CPP_FLAGS} ${DECOMP_LIB_FLAG} $< -o $@
 
 .PHONY:clean
