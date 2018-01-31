@@ -1,3 +1,14 @@
+/*!*****************************************************************************
+********************************************************************************
+**
+** @copyright Copyright (C) 2018 James Till Matta
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+** 
+********************************************************************************
+*******************************************************************************/
 #ifndef DECOMPLIB_EXAMPLE_DECOMPOSEBINARY_SPECTRUMIO_H
 #define DECOMPLIB_EXAMPLE_DECOMPOSEBINARY_SPECTRUMIO_H
 
