@@ -11,7 +11,6 @@
 *******************************************************************************/
 #ifndef DECOMPLIB_DECOMPOSITION_H
 #define DECOMPLIB_DECOMPOSITION_H
-#include<iostream>
 #include"DataVector.h"
 #include"DecompVector.h"
 #include"RespMatrix.h"
