@@ -13,7 +13,11 @@
 #define DECOMPLIB_DECOMPVECTOR_H
 #include<cassert>
 #include"DataVector.h"
-#include<iostream>
+
+namespace Detail
+{
+static const double TinyValue = 1.0e-10; ///<A tiny value to put in locations where the input spectrum is zero / too small in initialization
+}
 
 /*!
  * @class DecompVector
@@ -107,12 +111,20 @@ void DecompVector<ParamType>::initWithDataVector(const DataVector<ParamType>& va
         if(index < valSize)
         {
             vec[i] = ((factor*val.getElement(index))+offset);
-            if(vec[i] < static_cast<ParamType>(0.0)) std::cout<<"nvv: "<<val.getElement(index)<<", "<<vec[i]<<std::endl;
+            //safety net to handle cases where the input spectrum is zero
+            if(vec[i] < Detail::TinyValue)
+            {
+                vec[i] = Detail::TinyValue;
+            }
         }
         else
         {
             vec[i] = ((factor*val.getElement(valSize-1))+offset);
-            if(vec[i] < static_cast<ParamType>(0.0)) std::cout<<" negative vector value"<<std::endl;
+            //safety net to handle cases where the input spectrum is zero
+            if(vec[i] < Detail::TinyValue)
+            {
+                vec[i] = Detail::TinyValue;
+            }
         }
         
     }
@@ -133,8 +145,7 @@ bool DecompVector<ParamType>::isSafe()
     bool output = true;
     for(int i=0; i<size; ++i)
     {
-        //std::cout<<i<<", "<<vec[i]<<std::endl;
-        if(vec[i] < static_cast<ParamType>(0.0)) output = false; // here we have a negative value so we have failed
+        if(vec[i] <= static_cast<ParamType>(0.0)) output = false; // here we have a negative or zero value so we have failed
     }
     
     //if we made it to here then all the parameters are greater than zero
