@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
     double hiEdgeX = hist->GetXaxis()->GetBinLowEdge(histSizeX+1);
     int histSizeY = hist->GetYaxis()->GetNbins();
     double loEdgeY = hist->GetYaxis()->GetBinLowEdge(1);
-    double hiEdgeY = hist->GetYaxis()->GetBinLowEdge(histSizeX+1);
+    double hiEdgeY = hist->GetYaxis()->GetBinLowEdge(histSizeY+1);
     std::ofstream out(argv[3]);
     out<<"#Lines starting with a '#' in the first column are ignored\n";
     out<<"#X-axis: nbins, first bin low edge, last bin high edge\n";
