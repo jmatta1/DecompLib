@@ -89,6 +89,11 @@ int main(int argc, char* argv[])
     case -3:
         std::cout << "Data vector may be all zeros, or contain one or more negative number" << std::endl;
         return 1;
+    case -4:
+        std::cout << "During the element-wise multiplication and summing of one of the columns of\n"
+                  << "the response matrix and the decomposition vector, all the terms were zero.\n"
+                  << "This would give a zero in a denominator"<<std::endl;
+        return 1;
     default:
         std::cout << "Succesful decomposition took: "<<retVal<<" iterations"<<std::endl;
         break;
