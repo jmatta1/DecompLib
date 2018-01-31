@@ -103,24 +103,24 @@ int main(int argc, char* argv[])
     decompMeta.finalBinHiEdge = respMatMeta->finalYbinHiEdge;
     //write out the starting point
     std::ostringstream namer;
-    namer << argv[3] << "_init.b1d";
+    namer << argv[3] << "_init.csv";
     writeDecompData(namer.str(), decompOrig, decompMeta);
     namer.str("");
     namer.clear();
     //write out the final decomposition
-    namer << argv[3] << "_final.b1d";
+    namer << argv[3] << "_final.csv";
     writeDecompData(namer.str(), decompProc, decompMeta);
     namer.str("");
     namer.clear();
     //calculate and write the sum spectrum
     DataVector<double>* sumSpectrum = calculateSumSpectrum(decompProc, *responseMatrix);
-    namer << argv[3] << "_sum.b1d";
+    namer << argv[3] << "_sum.csv";
     writeSpectumData(namer.str(), *sumSpectrum, *spectrumMeta);
     namer.str("");
     namer.clear();
     //calculate and write the residual spectrum
     DataVector<double>* residSpectrum = calculateResidSpectrum(*inputSpectrum, *sumSpectrum);
-    namer << argv[3] << "_resid.b1d";
+    namer << argv[3] << "_resid.csv";
     writeSpectumData(namer.str(), *residSpectrum, *spectrumMeta);
     
     delete residSpectrum;
