@@ -82,6 +82,7 @@ std::tuple<DataVector<double>*, OneDMetaData*> readDataVector(const std::string&
     bool lastLineGood = true;
     int binNum;
     double value;
+    std::cout<<"Reading Spectrum"<<std::endl;
     while(lastLineGood)
     {
         lastLineGood = Detail::readAndIgnoreCommentLines(input, line);
