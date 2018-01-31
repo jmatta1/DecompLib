@@ -45,11 +45,11 @@ int main(int argc, char* argv[])
     std::cout<<"  Initial Values Set To:\n";
     if(initValSetting == 0)
     {
-        std::cout<<"    Spectrum Scaled By A Factor Of "<<startVal<<std::endl;
+        std::cout<<"    Spectrum Scaled By A Factor Of "<<startVal<<"\n"<<std::endl;
     }
     else
     {
-        std::cout<<"    Constant Value Of "<<startVal<<std::endl;
+        std::cout<<"    Constant Value Of "<<startVal<<"\n"<<std::endl;
     }
     //read the raw data
     DataVector<double>* inputSpectrum = nullptr;
