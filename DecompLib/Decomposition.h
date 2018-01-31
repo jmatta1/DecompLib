@@ -55,8 +55,9 @@ bool checkConvergence(ParamType* oldVals, ParamType* newVals, int numRespFuncs,
  * \return The number of iterations, or negative values for errors, -1 if a row
  *  or column of the response matrix contains all zeros, -2 if the initial parameter
  *  set has one or more values that are less than or equal to zero, -3 if the
- *  data vector contains one or more negative numbers or it may all be zeros, and
- *  -4 for the case that a value in a denominator, from a product of response
+ *  data vector contains one or more negative numbers or it may all be zeros, -4
+ *  for the case of the vector of row sums of the response matrix containing a zero,
+ *  and -5 for the case that a value in a denominator, from a product of response
  *  matrix column and decomposition vector
  *
  * This function uses the algorithm in "J. Tain, D. Cano-Ott, Algorithms for the
@@ -80,15 +81,22 @@ long long performDecomposition(DataVector<ParamType>& data, RespMatrix<ParamType
     //check to make sure the inputs are safe
     if(!respMatrix.isSafe())
     {
-        return -1;// a row or column of the response matrix contains all zeros
+        return -1ULL;// a row or column of the response matrix contains all zeros
     }
     if(!paramSet.isSafe())
     {
-        return -2;//initial guess may have one or more values that are less than or equal to zero
+        return -2ULL;//initial guess may have one or more values that are less than or equal to zero
     }
     if(!data.isSafe())
     {
-        return -3;//data vector may be all zeros, or contain one or more negative number
+        return -3ULL;//data vector may be all zeros, or contain one or more negative number
+    }
+    for(int j=0; j<numRespFunc; ++j)
+    {
+        if(respSum[j] == 0.0)
+        {
+            return -4ULL;//Response function row sums has a zero, which should not be possible with the other checks
+        }
     }
     
     const ParamType* respMat = respMatrix.getMatrixPtr();
@@ -117,7 +125,7 @@ long long performDecomposition(DataVector<ParamType>& data, RespMatrix<ParamType
             {
                 denom += oldVals[k]*respMatTr[offset+k];
             }
-            if(denom == 0.0) return -4ULL;
+            if(denom == 0.0) return -5ULL;
             mults[j] = data.getElement(j)/denom;
         }
         //calculate vector resp function multipliers
