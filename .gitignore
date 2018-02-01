@@ -38,5 +38,26 @@ convertCsv
 # Decompressed response matrix
 Example/DecomposeSpectrum/sample_response_matrix.csv
 
+
 # Root Data Files
 *.root
+
+# LaTeX Stuff
+*.ps
+*.dvi
+*.aux
+*.toc
+*.idx
+*.ind
+*.ilg
+*.log
+*.out
+*.brf
+*.blg
+*.bbl
+*.spl
+*.pdf
+
+# Doxygen generated directories
+doc/doxygen/html
+doc/doxygen/latex
