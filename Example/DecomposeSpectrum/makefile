@@ -1,14 +1,4 @@
-#*******************************************************************************
-#*******************************************************************************
-#*
-#* @copyright Copyright (C) 2018 James Till Matta
-#*
-#* This program is distributed in the hope that it will be useful,
-#* but WITHOUT ANY WARRANTY; without even the implied warranty of
-#* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#* 
-#*******************************************************************************
-#*******************************************************************************
+#third level makefile that builds the DecomposeSpectrum utility
 DECOMP_LIB_LOCATION_ABS=/home/jmatta1/code/DecompLib  # change this to the path in your system
 DECOMP_LIB_LOCATION_REL=../..
 CPP_FLAGS=-O3 -g --std=c++11 -march=native -mtune=native
