@@ -1,0 +1,37 @@
+/*!
+@mainpage DecompLib
+@section sec_intro Introduction
+DecompLib is a small template library for decomposing a spectrum into a set of weighted response functions. The decomposition processes is necessary because the response of a detector to mono-energetic incident radiation is not necessarily mono-energetic, let-alone at the same energy. Therefore to determine the radiation incident on the detector the detected spectrum must be decomposed using the response matrix (each row encodes the response to a particular mono-energetic input.)
+
+This decomposition can be stated as the following fitting problem:
+@f[
+S = \sum\limits_{\alpha}f_{\alpha}\times{}\vec{R}_{\alpha}
+@f]
+Where @f$S@f$ is the input spectrum @f$\vec{R}_{\alpha}@f$ are the rows of the response matrix (response functions), and @f$f_{\alpha}@f$ are the weights of the response functions (the incident spectrum). Here though the the various response functions may have a great deal of similarity, causing normal linear algreba methods to fail. This algorithm will yield positive definite results in a very numerically stable fashion. Please see the second half technical report in the DecompLib doc directory for more details.
+
+@section sec_install Installation
+
+@section sec_use Usage
+*/
+
+/*!
+@defgroup IO Input/Output Classes
+@brief Classes that contain input to and output from the decomposition.
+
+The DataVector class holds the original input spectrum.
+
+The RespMatrix class holds the response matrix.
+
+The DecompVector class holds the original guess as to the decomposition parameter and holds the final parameters set that is output by performDecomposition.
+
+*/
+
+/*!
+@defgroup Calculation Decomposition Functions
+@brief Functions used to decompose the input spectrum.
+
+The function performDecomposition takes the inputs and iterates until it has attained convergence.
+
+testConvergence is used by performDecomposition to check if it has obtained convergence in that iteration
+
+*/
