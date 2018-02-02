@@ -20,19 +20,23 @@ doc:
 
 .PHONY:clean
 clean:
+	@echo -e "\e[1m\e[32mCleaning Intermediates in doc Directory\e[0m"
 	-@make -i -C doc clean
+	@echo -e "\e[1m\e[32mCleaning Intermediates in Example Directory\e[0m"
 	-@make -i -C Example clean
 
 .PHONY:cleanall
-cleanall:clean
+cleanall:
+	@echo -e "\e[1m\e[32mCleaning Everything in doc Directory\e[0m"
 	-@make -i -C doc cleanall
+	@echo -e "\e[1m\e[32mCleaning Everything in Example Directory\e[0m"
 	-@make -i -C Example cleanall
 
 .PHONY:install
 install:
-	@echo -e "\e[1m\e[91mCreating Destination\e[0m"
+	@echo -e "\e[1m\e[32mCreating Destination\e[0m"
 	install -b -d ${Ginstall_Location}
-	@echo -e "\e[1m\e[91mCopying Headers\e[0m"
+	@echo -e "\e[1m\e[32mCopying Headers\e[0m"
 	install -b -m 644 -D ./DecompLib/*.h ${Ginstall_Location}
 
 .PHONY:uninstall
@@ -44,9 +48,9 @@ uninstall:
 
 .PHONY:local_install
 local_install:
-	@echo -e "\e[1m\e[91mCreating Destination\e[0m"
+	@echo -e "\e[1m\e[32mCreating Destination\e[0m"
 	install -b -d ${Linstall_Location}
-	@echo -e "\e[1m\e[91mCopying Headers\e[0m"
+	@echo -e "\e[1m\e[32mCopying Headers\e[0m"
 	install -b -m 644 -D ./DecompLib/*.h ${Linstall_Location}
 
 .PHONY:local_uninstall
