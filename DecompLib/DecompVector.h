@@ -40,6 +40,18 @@ public:
     DecompVector(int length, bool printBadSafety=true) :
         printErrors(printBadSafety), size(length), vec(new ParamType[length]){}
 
+    /*!
+     * @brief Copy Constructor
+     * @param dv The original DecompVector to copy
+     */
+    DecompVector(const DecompVector<ParamType>& dv);
+
+    /*!
+     * @brief Assignment Operator
+     * @param dv The DecompVector whose contents is to be copied into this one
+     */
+    DecompVector<ParamType>& operator=(const DecompVector<ParamType>& dv);
+
     ~DecompVector(){delete[] vec;}
 
     /*!
@@ -102,8 +114,32 @@ private:
     bool printErrors; ///<Stores if errors should be printed during safety checks
     int size; ///<The number of cells in the input data vector
     ParamType* vec; ///<The data vector itself
-    static const double TinyValue = 1.0e-10; ///<Tiny value to use where the input spectrum is zero / too small in initialization
+    double TinyValue = 1.0e-10; ///<Tiny value to use where the input spectrum is zero / too small in initialization
 };
+
+template<typename ParamType>
+DecompVector<ParamType>::DecompVector(const DecompVector<ParamType>& dv) :
+    printErrors(dv.printErrors), size(dv.size), vec(new ParamType[dv.size])
+{
+    for(int i=0; i<size; ++i)
+    {
+        vec[i] = dv.vec[i];
+    }
+}
+
+template<typename ParamType>
+DecompVector<ParamType>& DecompVector<ParamType>::operator=(const DecompVector<ParamType>& dv)
+{
+    delete[] vec;
+    printErrors = dv.printErrors;
+    size = dv.size;
+    vec = new ParamType[size];
+    for(int i=0; i<size; ++i)
+    {
+        vec[i] = dv.vec[i];
+    }
+    return *this;
+}
 
 template<typename ParamType>
 void DecompVector<ParamType>::initWithDataVector(const DataVector<ParamType>& val, const ParamType& factor, const ParamType& offset)
@@ -118,18 +154,18 @@ void DecompVector<ParamType>::initWithDataVector(const DataVector<ParamType>& va
         {
             vec[i] = ((factor*val.getElement(index))+offset);
             //safety net to handle cases where the input spectrum is zero
-            if(vec[i] < Detail::TinyValue)
+            if(vec[i] < TinyValue)
             {
-                vec[i] = Detail::TinyValue;
+                vec[i] = TinyValue;
             }
         }
         else
         {
             vec[i] = ((factor*val.getElement(valSize-1))+offset);
             //safety net to handle cases where the input spectrum is zero
-            if(vec[i] < Detail::TinyValue)
+            if(vec[i] < TinyValue)
             {
-                vec[i] = Detail::TinyValue;
+                vec[i] = TinyValue;
             }
         }
         
