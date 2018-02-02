@@ -61,6 +61,7 @@ Example/DecomposeSpectrum/sample_response_matrix.csv
 # Doxygen generated directories
 doc/doxygen/html
 doc/doxygen/latex
+doc/doxygen/index.html
 
 # Specific silly things because I am working in the same directory I develope in
 Example/CsvToRootTh1/img
