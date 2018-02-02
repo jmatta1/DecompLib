@@ -1,6 +1,6 @@
 #third level makefile for doxygen which calls doxygen and builds the latex it generates
 FILE_LIST=DataVector.h Decomposition.h DecompVector.h Helper.h RespMatrix.h main_page.dox
-DOX_LIST=$(FILE_LIST:%=../../DecompLib/%)
+DOX_LIST=$(FILE_LIST:%=../../DecompLib/%) Doxyfile
 .PHONY:doxygen
 doxygen:index.html
 
