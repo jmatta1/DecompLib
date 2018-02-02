@@ -73,11 +73,12 @@ Error Value | Description
 -5          | The number of response functions is not the same as the number of bins in the DecompVector
 -6          | The minimum value to be tested for convergence is less than or equal to zero
 -7          | The maximum change allowed to be considered converged is less than or equal to zero
+-8          | The number of bins in the input spectrum does not exceed the number of response functions
 */
 template<typename ParamType>
-long long testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMatrix,
-                     DecompVector<ParamType>& paramSet, ParamType minThresh,
-                     ParamType convThresh, bool printBadSafety=true)
+int testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMatrix,
+               DecompVector<ParamType>& paramSet, ParamType minThresh,
+               ParamType convThresh, bool printBadSafety=true)
 {
     if(!respMatrix.isSafe())
     {
@@ -86,7 +87,7 @@ long long testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMat
             std::cout<<"ERROR - Decomposition not performed"<<std::endl;
             std::cout<<"A row or column of the response matrix contains all zeros."<<std::endl;
         }
-        return -1ULL;
+        return -1;
     }
     if(!paramSet.isSafe())
     {
@@ -95,7 +96,7 @@ long long testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMat
             std::cout<<"ERROR - Decomposition not performed"<<std::endl;
             std::cout<<"Initial guess may have one or more values that are less than or equal to zero."<<std::endl;
         }
-        return -2ULL;
+        return -2;
     }
     if(!data.isSafe())
     {
@@ -104,7 +105,7 @@ long long testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMat
             std::cout<<"ERROR - Decomposition not performed"<<std::endl;
             std::cout<<"Input spectrum may be all zeros, or contain one or more negative number."<<std::endl;
         }
-        return -3ULL;
+        return -3;
     }
     if(data.getLength() != respMatrix.getRespFuncsLens())
     {
@@ -113,7 +114,7 @@ long long testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMat
             std::cout<<"ERROR - Decomposition not performed"<<std::endl;
             std::cout<<"Number of bins in input spectrum does not match number of bins per response function"<<std::endl;
         }
-        return -4ULL;
+        return -4;
     }
     if(paramSet.getLength() != respMatrix.getNumRespFuncs())
     {
@@ -122,7 +123,7 @@ long long testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMat
             std::cout<<"ERROR - Decomposition not performed"<<std::endl;
             std::cout<<"Number of response functions in the matrix does not match the number of bins in the DecompVector"<<std::endl;
         }
-        return -5ULL;
+        return -5;
     }
     if(!(minThresh > 0.0))
     {
@@ -131,7 +132,7 @@ long long testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMat
             std::cout<<"ERROR - Decomposition not performed"<<std::endl;
             std::cout<<"Minimum value to be tested for convergence is less than or equal to zero"<<std::endl;
         }
-        return -6ULL;
+        return -6;
     }
     if(!(convThresh > 0.0))
     {
@@ -140,7 +141,16 @@ long long testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMat
             std::cout<<"ERROR - Decomposition not performed"<<std::endl;
             std::cout<<"Fractional change for convergence is less than or equal to zero"<<std::endl;
         }
-        return -7ULL;
+        return -7;
+    }
+    if(data.getLength() <= paramSet.getLength())
+    {
+        if(printBadSafety)
+        {
+            std::cout<<"ERROR - Decomposition not performed"<<std::endl;
+            std::cout<<"There must be at least 1 more data bin than there are response functions"<<std::endl;
+        }
+        return -8;
     }
     
     return 0;

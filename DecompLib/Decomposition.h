@@ -47,6 +47,7 @@ Error Value | Description
 -5          | The number of response functions is not the same as the number of bins in the DecompVector
 -6          | The minimum value to be tested for convergence is less than or equal to zero
 -7          | The maximum change allowed to be considered converged is less than or equal to zero
+-8          | The number of bins in the input spectrum does not exceed the number of response functions
 
 This function uses the expectation maximization algorithm in "J. Tain, D. Cano-Ott, Algorithms for the analysis of beta-decay total absorption spectra, NIMA 571 (3) (2007) 728-738"
 The iterative formula presented in Equation 20 of that paper can be seen below (with the paper's indexing errors corrected).
