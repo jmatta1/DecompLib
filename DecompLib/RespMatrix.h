@@ -37,10 +37,15 @@ public:
      * \brief Constructor
      * \param numFunctions The number of response functions
      * \param numRespCells The number of cells per response function
+     * \param printBadSafety Whether or not to print locations of errors in safety checks
      */
-    RespMatrix(int numFunctions, int numRespCells) : numFunc(numFunctions),
-        respLen(numRespCells), matrix(new ParamType[numFunc*respLen]),
-        transpose(new ParamType[numFunc*respLen]), summedRows(new ParamType[numFunc]){assert(numFunctions>0);assert(numRespCells>0);}
+    RespMatrix(int numFunctions, int numRespCells, bool printBadSafety=true) : numFunc(numFunctions),
+        printErrors(printBadSafety), respLen(numRespCells),
+        matrix(new ParamType[numFunc*respLen]),
+        transpose(new ParamType[numFunc*respLen]),
+        summedRows(new ParamType[numFunc])
+        {assert(numFunctions>0); assert(numRespCells>0);}
+
     ~RespMatrix(){delete[] matrix; delete[] transpose; delete[] summedRows;}
     
     /*!
@@ -53,6 +58,8 @@ public:
     {
         matrix[funcNum*respLen+respInd] = val;
         transpose[respInd*numFunc+funcNum] = val;
+        //the row summing was just invalidated
+        rowSumPerformed = false;
     }
 
     /*!
@@ -114,12 +121,11 @@ public:
      *
      * \remark This function should only be used within decomp library
      */
-    ParamType* getSummedRowPtr(){return summedRows;}
-
-    /*!
-     * \brief Calculates the summed rows vector used in the decomposition calculation
-     */
-    void calculateSummedRows();
+    ParamType* getSummedRowPtr()
+    {
+        if(!rowSumPerformed) calculateSummedRows();
+        return summedRows;
+    }
 
     /*!
      * \brief Checks if the response matrix is safe for usage in the decomposition
@@ -131,6 +137,13 @@ public:
     bool isSafe();
 
 private:
+    /*!
+     * \brief Calculates the summed rows vector used in the decomposition calculation
+     */
+    void calculateSummedRows();
+
+    bool rowSumPerformed = false; ///<Stores if the response matrix row sum has been performed yet
+    bool printErrors; ///<Stores if errors should be printed during safety checks
     int numFunc; ///<The number of response functions in the matrix
     int respLen; ///<The number of elements in each response function
     ParamType* matrix; ///<The response matrix
@@ -155,6 +168,7 @@ void RespMatrix<ParamType>::calculateSummedRows()
             summedRows[i] += matrix[j];
         }
     }
+    rowSumPerformed = true;
 }
 
 template<typename ParamType>
@@ -175,7 +189,7 @@ bool RespMatrix<ParamType>::isSafe()
         if(zeroRow)
         {
             containsZeroRowOrCol = true;
-            std::cout<<"Row #"<<i<<" of the response matrix contains all zeros or negative values"<<std::endl;
+            if(printErrors) std::cout<<"Row #"<<i<<" of the response matrix contains all zeros or negative values"<<std::endl;
         }
     }
     for(int i=0; i<respLen; ++i)
@@ -192,7 +206,7 @@ bool RespMatrix<ParamType>::isSafe()
         if(zeroCol)
         {
             containsZeroRowOrCol = true;
-            std::cout<<"Column #"<<i<<" of the response matrix contains all zeros or negative values"<<std::endl;
+            if(printErrors) std::cout<<"Column #"<<i<<" of the response matrix contains all zeros or negative values"<<std::endl;
         }
     }
     return !containsZeroRowOrCol;

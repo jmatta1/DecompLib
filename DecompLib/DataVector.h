@@ -16,6 +16,7 @@
 *******************************************************************************/
 #ifndef DECOMPLIB_DATAVECTOR_H
 #define DECOMPLIB_DATAVECTOR_H
+#include<iostream>
 /*!
  * @class DataVector
  * @brief A representation of the vector of data that is the object of the decomposition
@@ -31,8 +32,11 @@ public:
     /*!
      * \brief Constructor
      * \param length the number of values in the vector
+     * \param printBadSafety Whether or not to print locations of errors in safety checks
      */
-    DataVector(int length) : size(length), vec(new ParamType[length]){}
+    DataVector(int length, bool printBadSafety=true) :
+        printErrors(printBadSafety), size(length), vec(new ParamType[length]){}
+
     ~DataVector(){delete[] vec;}
 
     /*!
@@ -78,6 +82,7 @@ public:
     bool isSafe();
 
 private:
+    bool printErrors; ///<Stores if errors should be printed during safety checks
     int size; ///<The number of cells in the input data vector
     ParamType* vec; ///<The data vector itself
 };
@@ -85,21 +90,33 @@ private:
 template<typename ParamType>
 bool DataVector<ParamType>::isSafe()
 {
-    //use kahan summation to check that the vector is non-zero
+    //initially assume the input spectrum is safe
+    bool output = true;
+    //since the input spectrum is allowed to have some zeros, check to make sure that
+    //the *entire* vector is not zero using kahan summation (while also checking
+    //to be certain that there are no negative values)
     ParamType sum = 0.0;
     ParamType comp = 0.0;
     for(int i=0; i<size; ++i)
     {
-        if(vec[i] < static_cast<ParamType>(0.0)) return false; // here we have a negative value so we have failed
+        if(vec[i] < static_cast<ParamType>(0.0))
+        {
+            if(printErrors) std::cout<<"Bin number "<<i<<" in input spectrum is negative"<<std::endl;
+            output = false;
+            
+        }
         ParamType compInput = (vec[i] - comp);
         ParamType tempSum = (sum + compInput);
         comp = ((tempSum - sum) - compInput);
         sum = tempSum;
     }
-    if(sum <= static_cast<ParamType>(0.0)) return false; //if we made it here then we have a zero vector
+    if(sum <= static_cast<ParamType>(0.0))//we have a zero or negative vector
+    {
+        if(printErrors) std::cout<<"Sum of all bins in input spectrum was zero or negative"<<std::endl;
+        output = false;
+    }
     
-    //if we made it to here then we have passed all safety checks
-    return true;
+    return output;
 }
 
 #endif //DECOMPLIB_DATAVECTOR_H

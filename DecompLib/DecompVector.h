@@ -17,12 +17,8 @@
 #ifndef DECOMPLIB_DECOMPVECTOR_H
 #define DECOMPLIB_DECOMPVECTOR_H
 #include<cassert>
+#include<iostream>
 #include"DataVector.h"
-
-namespace Detail
-{
-static const double TinyValue = 1.0e-10; ///<A tiny value to put in locations where the input spectrum is zero / too small in initialization
-}
 
 /*!
  * @class DecompVector
@@ -39,8 +35,11 @@ public:
     /*!
      * \brief Constructor
      * \param length the number of values in the vector
+     * \param printBadSafety Whether or not to print locations of errors in safety checks
      */
-    DecompVector(int length) : size(length), vec(new ParamType[length]){}
+    DecompVector(int length, bool printBadSafety=true) :
+        printErrors(printBadSafety), size(length), vec(new ParamType[length]){}
+
     ~DecompVector(){delete[] vec;}
 
     /*!
@@ -100,8 +99,10 @@ public:
     bool isSafe();
 
 private:
+    bool printErrors; ///<Stores if errors should be printed during safety checks
     int size; ///<The number of cells in the input data vector
     ParamType* vec; ///<The data vector itself
+    static const double TinyValue = 1.0e-10; ///<Tiny value to use where the input spectrum is zero / too small in initialization
 };
 
 template<typename ParamType>
@@ -150,10 +151,13 @@ bool DecompVector<ParamType>::isSafe()
     bool output = true;
     for(int i=0; i<size; ++i)
     {
-        if(vec[i] <= static_cast<ParamType>(0.0)) output = false; // here we have a negative or zero value so we have failed
+        if(vec[i] <= static_cast<ParamType>(0.0))
+        {
+            if(printErrors) std::cout<<"The decomposition vector has a zero or negative value"<<std::endl;
+            output = false; // here we have a negative or zero value
+        }
     }
     
-    //if we made it to here then all the parameters are greater than zero
     return output;
 }
 
