@@ -58,22 +58,17 @@ int main(int argc, char* argv[])
     RespMatrix<double>* responseMatrix = nullptr;
     TwoDMetaData* respMatMeta = nullptr;
     std::tie(responseMatrix, respMatMeta) = readResponseMatrix(std::string(argv[2]));
-    //make the decomp vectors
-    DecompVector<double> decompOrig(responseMatrix->getNumRespFuncs());
+    //make the decomp vector
     DecompVector<double> decompProc(responseMatrix->getNumRespFuncs());
-    //initialize the decomp vectors as appropriate
+    //initialize the decomp vector as appropriate
     if(initValSetting == 0)
-    {
-        decompOrig.initWithDataVector(*inputSpectrum, startVal, 0.0);
-        decompProc.initWithDataVector(*inputSpectrum, startVal, 0.0);
-    }
+    {decompProc.initWithDataVector(*inputSpectrum, startVal, 0.0);}
     else
-    {
-        decompOrig.initWithConstant(startVal);
-        decompProc.initWithConstant(startVal);
-    }
+    {decompProc.initWithConstant(startVal);}
+    //store a copy of the decomposition vector as the original values will be overwritten with the final values
+    DecompVector<double> decompOrig(decompProc);
     
-    //decompose
+    //decompose the input spectrum
     std::cout<<"Starting Decomposition"<<std::endl;
     long long retVal = performDecomposition(*inputSpectrum, *responseMatrix,
                                             decompProc, minThresh, convCrit);
