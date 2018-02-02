@@ -1,21 +1,21 @@
 # Here are typical global and local install locations for headers
-Global_Header_Loc=/usr/include/DecompLib
-Local_Header_Loc=~/include/DecompLib
+Global_Header_Loc=/usr/include
+Local_Header_Loc=~/include
 
-# select the location you want to install to with this variable, or set something custom
-Install_Location=${Global_Header_Loc}
+Ginstall_Location=${Global_Header_Loc}/decomplib
+Linstall_Location=${Local_Header_Loc}/decomplib
 
 .PHONY:all
 all:example doc
 
 .PHONY:example
 example:
-	@echo -e "\e[1m\e[32mBuilding example\e[0m"
+	@echo -e "\e[1m\e[32mBuilding Example and Utilities\e[0m"
 	@make -C Example all
 
 .PHONY:doc
 doc:
-	@echo -e "\e[1m\e[32mBuilding documentation\e[0m"
+	@echo -e "\e[1m\e[32mBuilding Documentation\e[0m"
 	@make -C doc all
 
 .PHONY:clean
@@ -31,14 +31,28 @@ cleanall:clean
 .PHONY:install
 install:
 	@echo -e "\e[1m\e[91mCreating Destination\e[0m"
-	install -b -d ${Install_Location}
+	install -b -d ${Ginstall_Location}
 	@echo -e "\e[1m\e[91mCopying Headers\e[0m"
-	install -b -m 644 -D ./DecompLib/*.h ${Install_Location}
+	install -b -m 644 -D ./DecompLib/*.h ${Ginstall_Location}
 
 .PHONY:uninstall
 uninstall:
 	@echo -e "\e[1m\e[91mDeleting Headers\e[0m"
-	rm ${Install_Location}/*.h
+	rm ${Ginstall_Location}/*.h
 	@echo -e "\e[1m\e[91mDeleting DecompLib Header Folder\e[0m"
-	rm -r ${Install_Location}
+	rm -r ${Ginstall_Location}
+
+.PHONY:local_install
+local_install:
+	@echo -e "\e[1m\e[91mCreating Destination\e[0m"
+	install -b -d ${Linstall_Location}
+	@echo -e "\e[1m\e[91mCopying Headers\e[0m"
+	install -b -m 644 -D ./DecompLib/*.h ${Linstall_Location}
+
+.PHONY:local_uninstall
+local_uninstall:
+	@echo -e "\e[1m\e[91mDeleting Headers\e[0m"
+	rm ${Linstall_Location}/*.h
+	@echo -e "\e[1m\e[91mDeleting DecompLib Header Folder\e[0m"
+	rm -r ${Linstall_Location}
 
