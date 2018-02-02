@@ -72,30 +72,9 @@ int main(int argc, char* argv[])
     std::cout<<"Starting Decomposition"<<std::endl;
     long long retVal = performDecomposition(*inputSpectrum, *responseMatrix,
                                             decompProc, minThresh, convCrit);
-    //tell the user about success or failure
-    switch(retVal)
-    {
-    case -1:
-        std::cout<<"A row or column of the response matrix contains all zeros" << std::endl;
-        return 1;
-    case -2:
-        std::cout << "Initial guess may have one or more values that are less than or equal to zero" << std::endl;
-        return 1;
-    case -3:
-        std::cout << "Data vector may be all zeros, or contain one or more negative number" << std::endl;
-        return 1;
-    case -4:
-        std::cout << "One of the rows of the response matrix summed to zero"<<std::endl;
-        return 1;
-    case -5:
-        std::cout << "During the element-wise multiplication and summing of one of the columns of\n"
-                  << "the response matrix and the decomposition vector, all the terms were zero.\n"
-                  << "This would give a zero in a denominator"<<std::endl;
-        return 1;
-    default:
-        std::cout << "Succesful decomposition took: "<<retVal<<" iterations"<<std::endl;
-        break;
-    }
+    //tell the user about success or return (since they already know about failure)
+    if(retVal < 0) return 1;
+    std::cout << "Succesful decomposition took: "<<retVal<<" iterations"<<std::endl;
     //if there was success then write out the various important spectra
     //create the decomp vector meta data
     OneDMetaData decompMeta;
