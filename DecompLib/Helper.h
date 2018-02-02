@@ -49,4 +49,100 @@ bool testConvergence(ParamType* oldVals, ParamType* newVals, int numRespFuncs, P
     return true;
 }
 
+/*!
+@ingroup Calculation
+
+@brief Performs a decomposition of data using respMatrix and the initial guess in paramSet, it then outputs the result in paramSet
+
+@tparam ParamType The floating point type that is to be used for the calculations
+ 
+@param data The DataVector with the spectrum to be decomposed
+@param respMatrix The RespMatrix which holds the set of response functions to use to decompose the data spectrum
+@param paramSet The DecompVector which contains the initial guess and will contain the final decomposition parameters
+@param minThresh The value below which parameters are not tested for determining convergence defaults to 1.0e-6
+@param convThresh maximum fractional change between iterations allowed before parameters are considered unconverged defaults to 0.005
+@param printBadSafety Print what failed in a safety check
+
+@return Negative values for errors, zero otherwise
+Error Value | Description
+:----------:|------
+-1          | A row or column of the response matrix contains all zeros
+-2          | One of the initial decomposition parameters is less than or equal to zero
+-3          | The data vector is either all zeros or contains one or more negative numbers
+-4          | The number of bins in the input spectrum is not the same as the number of bins in a response function
+-5          | The number of response functions is not the same as the number of bins in the DecompVector
+-6          | The minimum value to be tested for convergence is less than or equal to zero
+-7          | The maximum change allowed to be considered converged is less than or equal to zero
+*/
+long long testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMatrix,
+                     DecompVector<ParamType>& paramSet, ParamType minThresh = 1e-6,
+                     ParamType convThresh = 0.005, bool printBadSafety=true)
+{
+    if(!respMatrix.isSafe())
+    {
+        if(printBadSafety)
+        {
+            std::cout<<"ERROR - Decomposition not performed"<<std::endl;
+            std::cout<<"A row or column of the response matrix contains all zeros."<<std::endl;
+        }
+        return -1ULL;
+    }
+    if(!paramSet.isSafe())
+    {
+        if(printBadSafety)
+        {
+            std::cout<<"ERROR - Decomposition not performed"<<std::endl;
+            std::cout<<"Initial guess may have one or more values that are less than or equal to zero."<<std::endl;
+        }
+        return -2ULL;
+    }
+    if(!data.isSafe())
+    {
+        if(printBadSafety)
+        {
+            std::cout<<"ERROR - Decomposition not performed"<<std::endl;
+            std::cout<<"Input spectrum may be all zeros, or contain one or more negative number."<<std::endl;
+        }
+        return -3ULL;
+    }
+    if(data.getLength() != respMatrix.getRespFuncsLens())
+    {
+        if(printBadSafety)
+        {
+            std::cout<<"ERROR - Decomposition not performed"<<std::endl;
+            std::cout<<"Number of bins in input spectrum does not match number of bins per response function"<<std::endl;
+        }
+        return -4ULL;
+    }
+    if(paramSet.getLength() != respMatrix.getNumRespFuncs())
+    {
+        if(printBadSafety)
+        {
+            std::cout<<"ERROR - Decomposition not performed"<<std::endl;
+            std::cout<<"Number of response functions in the matrix does not match the number of bins in the DecompVector"<<std::endl;
+        }
+        return -5ULL;
+    }
+    if(!(minThresh > 0.0))
+    {
+        if(printBadSafety)
+        {
+            std::cout<<"ERROR - Decomposition not performed"<<std::endl;
+            std::cout<<"Minimum value to be tested for convergence is less than or equal to zero"<<std::endl;
+        }
+        return -6ULL;
+    }
+    if(!(convThresh > 0.0))
+    {
+        if(printBadSafety)
+        {
+            std::cout<<"ERROR - Decomposition not performed"<<std::endl;
+            std::cout<<"Fractional change for convergence is less than or equal to zero"<<std::endl;
+        }
+        return -7ULL;
+    }
+    
+    return 0;
+}
+
 #endif //DECOMPLIB_HELPER_H

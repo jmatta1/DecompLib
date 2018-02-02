@@ -16,6 +16,7 @@
 *******************************************************************************/
 #ifndef DECOMPLIB_DECOMPOSITION_H
 #define DECOMPLIB_DECOMPOSITION_H
+#include<iostream>
 #include<utility>
 #include"DataVector.h"
 #include"DecompVector.h"
@@ -34,6 +35,7 @@
 @param paramSet The DecompVector which contains the initial guess and will contain the final decomposition parameters
 @param minThresh The value below which parameters are not tested for determining convergence defaults to 1.0e-6
 @param convThresh maximum fractional change between iterations allowed before parameters are considered unconverged defaults to 0.005
+@param printBadSafety Print what failed in a safety check
 
 @return The number of iterations, or negative values for errors
 Error Value | Description
@@ -43,6 +45,8 @@ Error Value | Description
 -3          | The data vector is either all zeros or contains one or more negative numbers
 -4          | The number of bins in the input spectrum is not the same as the number of bins in a response function
 -5          | The number of response functions is not the same as the number of bins in the DecompVector
+-6          | The minimum value to be tested for convergence is less than or equal to zero
+-7          | The maximum change allowed to be considered converged is less than or equal to zero
 
 This function uses the expectation maximization algorithm in "J. Tain, D. Cano-Ott, Algorithms for the analysis of beta-decay total absorption spectra, NIMA 571 (3) (2007) 728-738"
 The iterative formula presented in Equation 20 of that paper can be seen below (with the paper's indexing errors corrected).
@@ -52,33 +56,15 @@ f_{\mu}^{(s+1)} = \frac{1}{\sum\limits_{j}R_{\mu{}j}} \sum\limits_{i}\frac{f_{\m
 Where @f$f_{\mu}^{(s+1)}@f$ contains the decomposition weights / spectrum for iteration @f$(s+1)@f$, @f$R_{\mu{}\nu{}}@f$ contains the response matrix, and @f$d_{i}@f$ contains the initial spectrum to be decomposed.
 
 The formula above is slightly rearranged to yield the algorithm used in the function below.
- */
+*/
 template<typename ParamType>
 long long performDecomposition(DataVector<ParamType>& data, RespMatrix<ParamType>& respMatrix,
                                DecompVector<ParamType>& paramSet, ParamType minThresh = 1e-6,
-                               ParamType convThresh = 0.005)
+                               ParamType convThresh = 0.005, bool printBadSafety=true)
 {
-    //before we allocate anything check to make sure the inputs are safe
-    if(!respMatrix.isSafe())
-    {
-        return -1ULL;// a row or column of the response matrix contains all zeros
-    }
-    if(!paramSet.isSafe())
-    {
-        return -2ULL;//initial guess may have one or more values that are less than or equal to zero
-    }
-    if(!data.isSafe())
-    {
-        return -3ULL;//data vector may be all zeros, or contain one or more negative number
-    }
-    if(data.getLength() != respMatrix.getRespFuncsLens())
-    {
-        return -4ULL;//the number of bins in the input spectrum is not the same as the number of bins per resp func
-    }
-    if(paramSet.getLength() != respMatrix.getNumRespFuncs())
-    {
-        return -5ULL;//the number of response functions in the matrix is not the same as the number of bins in the output vector
-    }
+    //before we allocate anything check to make sure the inputs are safe to procede
+    long long testResult = testSafety<data, respMatrix, paramSet, minThresh, convThresh, printBadSafety);
+    if(testResult != 0) return testResult;
     //now that all the safety checks are done that can be done, proceed with allocation and the like
     // generate the two sets of decomp values that get swapped as iteration occurs
     int numRespFunc = respMatrix.getNumRespFuncs();
