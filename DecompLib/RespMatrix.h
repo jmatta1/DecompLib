@@ -34,10 +34,10 @@ class RespMatrix
 {
 public:
     /*!
-     * \brief Constructor
-     * \param numFunctions The number of response functions
-     * \param numRespCells The number of cells per response function
-     * \param printBadSafety Whether or not to print locations of errors in safety checks
+     * @brief Constructor
+     * @param numFunctions The number of response functions
+     * @param numRespCells The number of cells per response function
+     * @param printBadSafety Whether or not to print locations of errors in safety checks
      */
     RespMatrix(int numFunctions, int numRespCells, bool printBadSafety=true) : numFunc(numFunctions),
         printErrors(printBadSafety), respLen(numRespCells),
@@ -49,10 +49,10 @@ public:
     ~RespMatrix(){delete[] matrix; delete[] transpose; delete[] summedRows;}
     
     /*!
-     * \brief Sets the element in the matrix and its transpose
-     * \param funcNum The index of the response function whose value is being set
-     * \param respInd The index within the response function that is being set
-     * \param val The value to set the cell to
+     * @brief Sets the element in the matrix and its transpose
+     * @param funcNum The index of the response function whose value is being set
+     * @param respInd The index within the response function that is being set
+     * @param val The value to set the cell to
      */
     void setElement(int funcNum, int respInd, ParamType val)
     {
@@ -63,10 +63,10 @@ public:
     }
 
     /*!
-     * \brief Returns the value of the matrix at the specified cell
-     * \param funcNum The index of the response function whose value is being set
-     * \param respInd The index within the response function that is being set
-     * \return The value of the matrix in the specified location
+     * @brief Returns the value of the matrix at the specified cell
+     * @param funcNum The index of the response function whose value is being set
+     * @param respInd The index within the response function that is being set
+     * @return The value of the matrix in the specified location
      */
     ParamType getElement(int funcNum, int respInd) const
     {
@@ -74,10 +74,10 @@ public:
     }
     
      /*!
-     * \brief Returns the value of the transpose at the specified cell
-     * \param funcNum The index of the response function whose value is being set
-     * \param respInd The index within the response function that is being set
-     * \return The value of the matrix in the specified location
+     * @brief Returns the value of the transpose at the specified cell
+     * @param funcNum The index of the response function whose value is being set
+     * @param respInd The index within the response function that is being set
+     * @return The value of the matrix in the specified location
      * 
      * This is the same as get element but allows row major traversal even with
      * iterating on function number faster than response index
@@ -88,38 +88,38 @@ public:
     }
 
     /*!
-     * \brief Returns the number of response functions in the matrix
-     * \return The number of response functions in the matrix
+     * @brief Returns the number of response functions in the matrix
+     * @return The number of response functions in the matrix
      */
     int getNumRespFuncs() const{return numFunc;}
     
     /*!
-     * \brief Returns the length of each response function in the matrix
-     * \return The length of the response functions in the matrix
+     * @brief Returns the length of each response function in the matrix
+     * @return The length of the response functions in the matrix
      */
     int getRespFuncsLens() const{return respLen;}
 
     /*!
-     * \brief Gives access to the underlying matrix pointer
-     * \return The underlying matrix pointer
+     * @brief Gives access to the underlying matrix pointer
+     * @return The underlying matrix pointer
      *
-     * \remark This function should only be used within decomp library
+     * @remark This function should only be used within decomp library
      */
     ParamType* getMatrixPtr(){return matrix;}
     
     /*!
-     * \brief Gives access to the underlying matrix transpose pointer
-     * \return The underlying matrix transpose pointer
+     * @brief Gives access to the underlying matrix transpose pointer
+     * @return The underlying matrix transpose pointer
      *
-     * \remark This function should only be used within decomp library
+     * @remark This function should only be used within decomp library
      */
     ParamType* getTransposePtr(){return transpose;}
 
     /*!
-     * \brief Gives access to the underlying pointer to the vector from summing the rows of the resp matrix
-     * \return The underlying summed row vector pointer
+     * @brief Gives access to the underlying pointer to the vector from summing the rows of the resp matrix
+     * @return The underlying summed row vector pointer
      *
-     * \remark This function should only be used within decomp library
+     * @remark This function should only be used within decomp library
      */
     ParamType* getSummedRowPtr()
     {
@@ -128,8 +128,8 @@ public:
     }
 
     /*!
-     * \brief Checks if the response matrix is safe for usage in the decomposition
-     * \return True if safe, False if unsafe
+     * @brief Checks if the response matrix is safe for usage in the decomposition
+     * @return True if safe, False if unsafe
      *
      * This makes sure that each of the rows and each of the columns sums to
      * greater than zero and contains no negative values
@@ -138,7 +138,7 @@ public:
 
 private:
     /*!
-     * \brief Calculates the summed rows vector used in the decomposition calculation
+     * @brief Calculates the summed rows vector used in the decomposition calculation
      */
     void calculateSummedRows();
 

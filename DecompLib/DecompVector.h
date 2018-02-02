@@ -33,9 +33,9 @@ class DecompVector
 {
 public:
     /*!
-     * \brief Constructor
-     * \param length the number of values in the vector
-     * \param printBadSafety Whether or not to print locations of errors in safety checks
+     * @brief Constructor
+     * @param length the number of values in the vector
+     * @param printBadSafety Whether or not to print locations of errors in safety checks
      */
     DecompVector(int length, bool printBadSafety=true) :
         printErrors(printBadSafety), size(length), vec(new ParamType[length]){}
@@ -43,55 +43,55 @@ public:
     ~DecompVector(){delete[] vec;}
 
     /*!
-     * \brief Places a given value into a specific index in the vector
-     * \param index The index into the vector
-     * \param value The value to place at index
+     * @brief Places a given value into a specific index in the vector
+     * @param index The index into the vector
+     * @param value The value to place at index
      * 
-     * \remark if index is negative or greater than the length of the vector, behavior is undefined
+     * @remark if index is negative or greater than the length of the vector, behavior is undefined
      */
     void setElement(int index, ParamType value){vec[index] = value;}
 
     /*!
-     * \brief Returns the value of the vector at index
-     * \param index The index into the vector
-     * \return the value of the vector at index
+     * @brief Returns the value of the vector at index
+     * @param index The index into the vector
+     * @return the value of the vector at index
      * 
-     * \remark if index is negative or greater than the length of the vector, behavior is undefined
+     * @remark if index is negative or greater than the length of the vector, behavior is undefined
      */
     ParamType getElement(int index) const{return vec[index];}
 
     /*!
-     * \brief Gets the size of the vector
-     * \return The number of cells in the vector
+     * @brief Gets the size of the vector
+     * @return The number of cells in the vector
      */
     int getLength() const{return size;}
 
     /*!
-     * \brief Initializes this vector with a constant parameter
-     * \param val The value that every element of the vector should contain
+     * @brief Initializes this vector with a constant parameter
+     * @param val The value that every element of the vector should contain
      */
     void initWithConstant(const ParamType& val);
 
     /*!
-     * \brief Initializes this vector by subsampling a DataVector
-     * \param val The data vector that this decomp vector should be initialized from,
+     * @brief Initializes this vector by subsampling a DataVector
+     * @param val The data vector that this decomp vector should be initialized from,
      * the length of this vector should be greater than or equal to the length of this vector
-     * \param factor A factor to multiply the values from the data vector by
-     * \param offset An offset to add to the values from the data vector
+     * @param factor A factor to multiply the values from the data vector by
+     * @param offset An offset to add to the values from the data vector
      */
     void initWithDataVector(const DataVector<ParamType>& val, const ParamType& factor, const ParamType& offset = 0.0);
 
     /*!
-     * \brief Gives access to the underlying vector pointer
-     * \return The underlying vector pointer
+     * @brief Gives access to the underlying vector pointer
+     * @return The underlying vector pointer
      *
-     * \remark This function should only be used within decomp library
+     * @remark This function should only be used within decomp library
      */
     ParamType* getRawDataPtr(){return vec;}
 
     /*!
-     * \brief Checks if the decomp vector guess is safe for usage in the decomposition
-     * \return True if safe, False if unsafe
+     * @brief Checks if the decomp vector guess is safe for usage in the decomposition
+     * @return True if safe, False if unsafe
      *
      * Checking the vector's safety involves testing that every element is
      * greater than zero
@@ -153,7 +153,7 @@ bool DecompVector<ParamType>::isSafe()
     {
         if(vec[i] <= static_cast<ParamType>(0.0))
         {
-            if(printErrors) std::cout<<"The decomposition vector has a zero or negative value"<<std::endl;
+            if(printErrors) std::cout<<"Bin number "<<i<<" in the decomposition vector has a zero or negative value"<<std::endl;
             output = false; // here we have a negative or zero value
         }
     }
