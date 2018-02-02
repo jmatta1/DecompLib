@@ -6,15 +6,15 @@ Ginstall_Location=${Global_Header_Loc}/decomplib
 Linstall_Location=${Local_Header_Loc}/decomplib
 
 .PHONY:all
-all:example doc
+all:example docs
 
 .PHONY:example
 example:
 	@echo -e "\e[1m\e[32mBuilding Example and Utilities\e[0m"
 	@make -C Example all
 
-.PHONY:doc
-doc:
+.PHONY:docs
+docs:
 	@echo -e "\e[1m\e[32mBuilding Documentation\e[0m"
 	@make -C doc all
 
