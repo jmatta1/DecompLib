@@ -52,7 +52,7 @@ bool testConvergence(ParamType* oldVals, ParamType* newVals, int numRespFuncs, P
 /*!
 @ingroup Calculation
 
-@brief Performs a decomposition of data using respMatrix and the initial guess in paramSet, it then outputs the result in paramSet
+@brief Tests the inputs that would go into performDecomposition for safety
 
 @tparam ParamType The floating point type that is to be used for the calculations
  
@@ -60,7 +60,7 @@ bool testConvergence(ParamType* oldVals, ParamType* newVals, int numRespFuncs, P
 @param respMatrix The RespMatrix which holds the set of response functions to use to decompose the data spectrum
 @param paramSet The DecompVector which contains the initial guess and will contain the final decomposition parameters
 @param minThresh The value below which parameters are not tested for determining convergence defaults to 1.0e-6
-@param convThresh maximum fractional change between iterations allowed before parameters are considered unconverged defaults to 0.005
+@param convThresh The maximum fractional change between iterations allowed before parameters are considered unconverged defaults to 0.005
 @param printBadSafety Print what failed in a safety check
 
 @return Negative values for errors, zero otherwise
@@ -74,9 +74,10 @@ Error Value | Description
 -6          | The minimum value to be tested for convergence is less than or equal to zero
 -7          | The maximum change allowed to be considered converged is less than or equal to zero
 */
+template<typename ParamType>
 long long testSafety(DataVector<ParamType>& data, RespMatrix<ParamType>& respMatrix,
-                     DecompVector<ParamType>& paramSet, ParamType minThresh = 1e-6,
-                     ParamType convThresh = 0.005, bool printBadSafety=true)
+                     DecompVector<ParamType>& paramSet, ParamType minThresh,
+                     ParamType convThresh, bool printBadSafety=true)
 {
     if(!respMatrix.isSafe())
     {

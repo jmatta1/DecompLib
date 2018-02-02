@@ -34,7 +34,7 @@
 @param respMatrix The RespMatrix which holds the set of response functions to use to decompose the data spectrum
 @param paramSet The DecompVector which contains the initial guess and will contain the final decomposition parameters
 @param minThresh The value below which parameters are not tested for determining convergence defaults to 1.0e-6
-@param convThresh maximum fractional change between iterations allowed before parameters are considered unconverged defaults to 0.005
+@param convThresh The maximum fractional change between iterations allowed before parameters are considered unconverged defaults to 0.005
 @param printBadSafety Print what failed in a safety check
 
 @return The number of iterations, or negative values for errors
@@ -63,7 +63,7 @@ long long performDecomposition(DataVector<ParamType>& data, RespMatrix<ParamType
                                ParamType convThresh = 0.005, bool printBadSafety=true)
 {
     //before we allocate anything check to make sure the inputs are safe to procede
-    long long testResult = testSafety<data, respMatrix, paramSet, minThresh, convThresh, printBadSafety);
+    long long testResult = testSafety(data, respMatrix, paramSet, minThresh, convThresh, printBadSafety);
     if(testResult != 0) return testResult;
     //now that all the safety checks are done that can be done, proceed with allocation and the like
     // generate the two sets of decomp values that get swapped as iteration occurs
