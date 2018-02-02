@@ -4,8 +4,6 @@ all:doxygen technical_report
 
 .PHONY:doxygen
 doxygen:
-	@echo -e "\e[1m\e[32mMaking Doxygen\e[0m"
-	@sleep 1
 	@make -C doxygen
 
 .PHONY:technical_report
