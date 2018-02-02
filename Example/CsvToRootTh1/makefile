@@ -2,9 +2,9 @@
 ROOT_FLAGS=`root-config --cflags --libs`
 CPP_FLAGS=-O3 --std=c++11 -march=native -mtune=native
 
-convertCsv: main.cpp
-	g++ ${CPP_FLAGS} ${ROOT_FLAGS} main.cpp -o convertCsv
+convert1dCsv: main.cpp
+	g++ ${CPP_FLAGS} ${ROOT_FLAGS} main.cpp -o convert1dCsv
 
 .PHONY:cleanall
 cleanall:
-	-rm convertCsv
+	-rm convert1dCsv
