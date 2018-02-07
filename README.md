@@ -6,7 +6,8 @@ A C++ header only library for decomposition of spectra into a sum of response fu
    - [Build](#build)
    - [Install](#install)
  - [Usage](#usage)
- - [Example](#example)
+ - [Documentation](#documentation)
+ - [Example Directory](#example-directory)
    - [DecomposeSpectrum](#decomposespectrum)
    - [RootTh1ToCsv](#rootth1tocsv)
    - [RootTh2ToCsv](#rootth2tocsv)
@@ -67,12 +68,10 @@ parameterSet.initWithConstant(initialValue);
 long long retVal = performDecomposition(inputSpectrum, responseMatrix, parameterSet);
 ```
 
-For more information about the usage and member functions of DataVector, RespMatrix, and DecompVector check out the \ref IO module.
+## Documentation
+Documentation is available in a few forms. For the full documenation of DecompLib's objects and functions please see [https://jmatta1.github.io/DecompLib/](https://jmatta1.github.io/DecompLib/) or generate the doxygen documentation within the doc directory. For more about usage of the algorithm itself and the potential alternative uses and pitfalls associated with it, see the second half of the technical report in the doc directory.
 
-To learn more about \ref performDecomposition check out the \ref Calculation module.
-
-
-## Example
+## Example Directory
 DecompLib contains a directory called Example. This directory contains a program demonstrating the usage of DecompLib as well as four utility functions to assist with the input and output to the example.
 
 ### DecomposeSpectrum
