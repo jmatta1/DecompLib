@@ -3,15 +3,15 @@ A C++ header only library for decomposition of spectra into a sum of response fu
 
  - [Introduction](#introduction)
  - [Build and Install](#build-and-install)
- - - [Build](#build)
- - - [Install](#install)
+   - [Build](#build)
+   - [Install](#install)
  - [Usage](#usage)
  - [Example](#example)
- - - [DecomposeSpectrum](#decomposespectrum)
- - - [RootTh1ToCsv](#rootth1tocsv)
- - - [RootTh2ToCsv](#rootth2tocsv)
- - - [CsvToRootTh1](#csvtorootth1)
- - - [CsvToRootTh2](#csvtorootth2)
+   - [DecomposeSpectrum](#decomposespectrum)
+   - [RootTh1ToCsv](#rootth1tocsv)
+   - [RootTh2ToCsv](#rootth2tocsv)
+   - [CsvToRootTh1](#csvtorootth1)
+   - [CsvToRootTh2](#csvtorootth2)
  - [Extended Usage](#extended-usage)
 
 ## Introduction
