@@ -171,5 +171,3 @@ long long retVal = performDecomposition(inputSpectrum, responseMatrix,
 //member function `getElement(binNumber)`
 ```
 
-To learn more about the particular pitfalls that are possible with the algorithm please see the second half technical report in the DecompLib doc directory.
-

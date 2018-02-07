@@ -54,6 +54,8 @@ For more information about the usage and member functions of DataVector, RespMat
 
 To learn more about \ref performDecomposition check out the \ref Calculation module.
 
+@section sec_doc Documentation
+Documentation is available in a few forms. For the full documenation of DecompLib's objects and functions please see the \ref IO and \ref Calculation modules. For more about usage of the algorithm itself and the potential alternative uses and pitfalls associated with it, see the second half of the technical report in the doc directory.
 
 @section sec_example Example
 DecompLib contains a directory called Example. This directory contains a program demonstrating the usage of DecompLib as well as four utility functions to assist with the input and output to the example.

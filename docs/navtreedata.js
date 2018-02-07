@@ -7,6 +7,7 @@ var NAVTREE =
       [ "Install", "index.html#ssec_install", null ]
     ] ],
     [ "Usage", "index.html#sec_use", null ],
+    [ "Documentation", "index.html#sec_doc", null ],
     [ "Example", "index.html#sec_example", [
       [ "DecomposeSpectrum", "index.html#ssec_decompose", null ],
       [ "RootTh1ToCsv", "index.html#ssec_root1d", null ],
