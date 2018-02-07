@@ -8,7 +8,8 @@ DecompLib is a small header only template library for decomposing a spectrum int
 
 This decomposition can be stated as the following fitting problem:
 
-![Gif with Equation](https://raw.githubusercontent.com/jmatta1/DecompLib/master/readme_pictures/main_eqn.gif)
+![Gif with Equation](doc/readme_pictures/main_eqn.gif?raw=true "Title")
+
 
 Where `S` is the input spectrum `R_alpha` are the rows of the response matrix (response functions), and `f_alpha` are the weights of the response functions (the incident spectrum). Here though the the various response functions may have a great deal of similarity, causing normal linear algreba methods to fail. The algorithm used in DecompLib will yield positive definite results in a numerically stable fashion. Please see the second half technical report in the DecompLib doc directory for more details.
 
