@@ -10,10 +10,10 @@ Given a spectrum and response matrix DecompLib can find the incident spectrum (o
 
 ![Png with Decomposition Example](doc/readme_pictures/fit_plot.png?raw=true "Decomposition Example")
 
-This decomposition can be stated as the following fitting problem:
+Here the blue curve is the output of the decomposition algorithm (and the incident spectrum in gammas per second per bin), the red is the algorithm's reconstruction of the input spectrum, the black is original input spectrum and the curves in varying shades of magenta, pink, and gray are the response functions multiplied by the corresponding weights obtained by the decomposition algorithm (the original response function was normalized to be the "average response to a single gamma ray").
 
+A decomposition can be stated as the following fitting problem:
 ![Gif with Equation](doc/readme_pictures/main_eqn.gif?raw=true "Decomposition Problem")
-
 Where `S` is the input spectrum `R_alpha` are the rows of the response matrix (response functions), and `f_alpha` are the weights of the response functions (the incident spectrum). Here though the the various response functions may have a great deal of similarity, causing normal linear algreba methods to fail. The algorithm used in DecompLib will yield positive definite results in a numerically stable fashion. Please see the second half technical report in the DecompLib doc directory for more details.
 
 I ask that, if you use DecompLib in work that you are publishing, that you cite DecompLib
