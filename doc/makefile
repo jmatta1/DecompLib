@@ -21,3 +21,7 @@ clean:
 cleanall:
 	-@make -C doxygen cleanall
 	-@make -C technical_report cleanall
+
+.PHONY:cleanall_doxygen
+cleanall_doxygen:
+	-@make -C doxygen cleanall

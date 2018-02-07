@@ -60,3 +60,10 @@ local_uninstall:
 	@echo -e "\e[1m\e[91mDeleting DecompLib Header Folder\e[0m"
 	rm -r ${Linstall_Location}
 
+.PHONY:gh-pages
+gh-pages:
+	@echo -e "\e[1m\e[32mBuilding Github Pages documentation\e[0m"
+	-@rm -rf docs
+	@make -C doc doxygen
+	@mv doc/doxygen/html docs
+	-@make -i -C doc cleanall_doxygen
