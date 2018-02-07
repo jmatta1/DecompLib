@@ -7,10 +7,8 @@ A C++ header only library for decomposition of spectra into a sum of response fu
 DecompLib is a small header only template library for decomposing a spectrum into a set of weighted response functions. The decomposition processes is necessary because the response of a detector to mono-energetic incident radiation is not necessarily mono-energetic, let alone at the same energy. Therefore to determine the radiation incident on the detector the detected spectrum must be decomposed using the response matrix (each row encodes the response to a particular mono-energetic input.)
 
 This decomposition can be stated as the following fitting problem:
-@f[
-S = \sum\limits_{\alpha}f_{\alpha}\times{}\vec{R}_{\alpha}
-@f]
-Where @f$S@f$ is the input spectrum @f$\vec{R}_{\alpha}@f$ are the rows of the response matrix (response functions), and @f$f_{\alpha}@f$ are the weights of the response functions (the incident spectrum). Here though the the various response functions may have a great deal of similarity, causing normal linear algreba methods to fail. The algorithm used in DecompLib will yield positive definite results in a numerically stable fashion. Please see the second half technical report in the DecompLib doc directory for more details.
+$$ S = \sum\limits_{\alpha}f_{\alpha}\times{}\vec{R}_{\alpha} $$
+Where $S$ is the input spectrum $\vec{R}_{\alpha}$ are the rows of the response matrix (response functions), and $f_{\alpha}$ are the weights of the response functions (the incident spectrum). Here though the the various response functions may have a great deal of similarity, causing normal linear algreba methods to fail. The algorithm used in DecompLib will yield positive definite results in a numerically stable fashion. Please see the second half technical report in the DecompLib doc directory for more details.
 
 I ask that, if you use DecompLib in work that you are publishing, that you cite DecompLib
 
@@ -36,7 +34,7 @@ If you wish to install locally:
 ## Usage
 Usage of the library is simple. One need only instantiate one of each of the three classes, fill them with data, then call the performDecomposition function to decompose the spectrum. Since code is worth more than prose for this a semi-pseudocode example is below.
 
-```
+```cpp
 int numberDataBins = X;
 DataVector<double> inputSpectrum(numberDataBins, writeErrorMsgs);
 //loop to set the inputSpectrum bin values with setElement(bin#, value)
@@ -83,7 +81,7 @@ The Example/CsvToRootTh1 contains a utility that a 2D histogram in a csv file an
 ## Extended Usage
 This is a greatly expanded version of the usage pseudocode from above. It includes comments explaining more about choices as well as showing where default parameters were chosen in function calls above.
 
-```
+```cpp
 //decide what floating point type will be used for everything
 typedef double fp_type;
 
