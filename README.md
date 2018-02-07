@@ -10,7 +10,7 @@ Given a spectrum and response matrix DecompLib can find the incident spectrum (o
 
 ![Png with Decomposition Example](doc/readme_pictures/fit_plot.png?raw=true "Decomposition Example")
 
-Here the blue curve is the output of the decomposition algorithm (and the incident spectrum in gammas per second per bin), the red is the algorithm's reconstruction of the input spectrum, the black is original input spectrum and the curves in varying shades of magenta, pink, and gray are the response functions multiplied by the corresponding weights obtained by the decomposition algorithm (the original response function was normalized to be the "average response to a single gamma ray").
+Here the blue curve is the output of the decomposition algorithm (and the incident spectrum in gammas per second per bin), the black is the algorithm's reconstruction of the input spectrum, the red is original input spectrum, and the curves in varying shades of magenta, pink, and gray are the response functions multiplied by the corresponding weights obtained by the decomposition algorithm (the original response function was normalized to be the "average response to a single gamma ray").
 
 A decomposition can be stated as the following fitting problem:
 ![Gif with Equation](doc/readme_pictures/main_eqn.gif?raw=true "Decomposition Problem")
