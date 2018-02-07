@@ -100,7 +100,7 @@ std::tuple<DataVector<double>*, OneDMetaData*> readDataVector(const std::string&
             data->setElement(binNum, value);
         }
     }
-    //now return the matrix and its meta data
+    //now return the vector and its meta data
     return std::make_tuple(data, meta);
 }
 
