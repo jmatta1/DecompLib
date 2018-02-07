@@ -2,7 +2,7 @@
 @mainpage DecompLib
 @tableofcontents
 @section sec_intro Introduction
-DecompLib is a small template library for decomposing a spectrum into a set of weighted response functions. The decomposition processes is necessary because the response of a detector to mono-energetic incident radiation is not necessarily mono-energetic, let alone at the same energy. Therefore to determine the radiation incident on the detector the detected spectrum must be decomposed using the response matrix (each row encodes the response to a particular mono-energetic input.)
+DecompLib is a small header only template library for decomposing a spectrum into a set of weighted response functions. The decomposition processes is necessary because the response of a detector to mono-energetic incident radiation is not necessarily mono-energetic, let alone at the same energy. Therefore to determine the radiation incident on the detector the detected spectrum must be decomposed using the response matrix (each row encodes the response to a particular mono-energetic input.)
 
 This decomposition can be stated as the following fitting problem:
 @f[
