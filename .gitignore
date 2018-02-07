@@ -32,8 +32,9 @@
 *.app
 convert1d
 convert2d
-Example/DecomposeSpectrum/decompose
+decompose
 convert1dCsv
+convert2dCsv
 
 # Decompressed response matrix
 Example/DecomposeSpectrum/sample_response_matrix.csv

@@ -1,11 +1,16 @@
 #second level make file that builds the example and associated utilities
 .PHONY:all
-all:csvtorootth1 decomposespectrum rootth1tocsv rootth2tocsv
+all:csvtorootth1 csvtorootth2 decomposespectrum rootth1tocsv rootth2tocsv
 
 .PHONY:csvtorootth1
 csvtorootth1:
 	@echo -e "\e[1m\e[32mBuilding CsvToRootTh1 Utility\e[0m"
 	@make -C CsvToRootTh1
+
+.PHONY:csvtorootth2
+csvtorootth2:
+	@echo -e "\e[1m\e[32mBuilding CsvToRootTh2 Utility\e[0m"
+	@make -C CsvToRootTh2
 
 .PHONY:decomposespectrum
 decomposespectrum:
@@ -29,6 +34,7 @@ clean:
 .PHONY:cleanall
 cleanall:
 	-@make -C CsvToRootTh1 cleanall
+	-@make -C CsvToRootTh2 cleanall
 	-@make -C DecomposeSpectrum cleanall
 	-@make -C RootTh1ToCsv cleanall
 	-@make -C RootTh2ToCsv cleanall
