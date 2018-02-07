@@ -111,7 +111,9 @@ TH1D* readCsvSpectrum(const std::string& fileName, const std::string& histName, 
             hist->SetBinContent(binNum+1, value);
         }
     }
-    //now return the matrix and its meta data
+    //now make ROOT actually calculate the statistics for the histogram correctly (since I am not using fill)
+    hist->ResetStats();
+    //now return the histogram
     return hist;
 }
 
