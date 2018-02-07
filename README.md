@@ -1,7 +1,18 @@
 # DecompLib
 A C++ header only library for decomposition of spectra into a sum of response functions whose weights are positive definite.
 
-@tableofcontents
+ - [Introduction](#introduction)
+ - [Build and Install](#build-and-install)
+ - - [Build](#build)
+ - - [Install](#install)
+ - [Usage](#usage)
+ - [Example](#example)
+ - - [DecomposeSpectrum](#decomposespectrum)
+ - - [RootTh1ToCsv](#rootth1tocsv)
+ - - [RootTh2ToCsv](#rootth2tocsv)
+ - - [CsvToRootTh1](#csvtorootth1)
+ - - [CsvToRootTh2](#csvtorootth2)
+ - [Extended Usage](#extended-usage)
 
 ## Introduction
 DecompLib is a small header only template library for decomposing a spectrum into a set of weighted response functions. The decomposition processes is necessary because the response of a detector to mono-energetic incident radiation is not necessarily mono-energetic, let alone at the same energy. Therefore to determine the radiation incident on the detector the detected spectrum must be decomposed using the response matrix (each row encodes the response to a particular mono-energetic input.)
@@ -16,7 +27,7 @@ A decomposition can be stated as the following fitting problem:
 ![Gif with Equation](doc/readme_pictures/main_eqn.gif?raw=true "Decomposition Problem")
 Where `S` is the input spectrum `R_alpha` are the rows of the response matrix (response functions), and `f_alpha` are the weights of the response functions (the incident spectrum). Here though the the various response functions may have a great deal of similarity, causing normal linear algreba methods to fail. The algorithm used in DecompLib will yield positive definite results in a numerically stable fashion. Please see the second half technical report in the DecompLib doc directory for more details.
 
-I ask that, if you use DecompLib in work that you are publishing, that you cite DecompLib
+I ask that if you use DecompLib in work that you are publishing, that you cite it.
 
 ## Build and Install
 Because DecompLib is a header only library it is unnecessary to build anything prior to installing it. The only things that need to be built are the documentation and the example. The next section tells how to build the example and documentation, if you merely wish to install the headers and start using them you can skip straight to the install subsection
