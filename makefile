@@ -66,4 +66,5 @@ gh-pages:
 	-@rm -rf docs
 	@make -C doc doxygen
 	@mv doc/doxygen/html docs
+	grep -lr "http://cdn.mathjax.org" docs | xargs sed -i 's,http://cdn.mathjax.org,https://cdn.mathjax.org,'
 	-@make -i -C doc cleanall_doxygen
