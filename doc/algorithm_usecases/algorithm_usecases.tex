@@ -1,0 +1,201 @@
+\documentclass{article}
+\usepackage{amsmath}  %for the align environment
+\usepackage{xfrac}    %for pretty swing fractions
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{mathtools}
+\usepackage{esint}
+
+\newcommand*\VF[1]{\mathbf{#1}}
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\paren}{\lparen}{\rparen}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+\begin{document}
+
+\title{Spectrum and Position Decomposition}
+\author{James T. Matta}
+\date{21 July 2017}
+\maketitle
+\tableofcontents
+
+\section{The Algorithm}
+Frequently one is presented with a matrix equation that looks something like
+\begin{align}
+	Y_{i} = \sum\limits_{\alpha}X_{\alpha}\times{}M_{\alpha,i}
+\end{align}
+Where
+\begin{itemize}
+\item $Y=$ Some know vector of data
+\item $X=$ An unknown vector of multipliers
+\item $M=$ Some matrix
+\end{itemize}
+
+In many cases simple linear algebra can be used to solve this problem. However, there are a number of cases where the linear algebra solution is incorrect because it will yield negative values which are unphysical.
+
+In these cases the problem can be solved in a numerically stable and positive definite way [Taín and Ott, NIMA 571 (2007) 728–738] as shown in the equation below.
+
+\begin{align}
+	f_{\mu}^{(s+1)} = \frac{1}{\sum\limits_{j}R_{\mu{}j}} \sum\limits_{i}\frac{f_{\mu{}}^{(s)} R_{\mu{}i}d_i}{\sum\limits_{\alpha}R_{\alpha{}i}f_{\alpha}^{(s)}} \\
+\end{align}
+Where:
+\begin{itemize}
+\item $m=$ Number of response functions
+\item $n=$ Number of data bins
+\item $R=$ Matrix of Response functions $(m \times n)$
+\item $d=$ Input spectrum vector $(n \times 1)$
+\item $f^{(s)}=$ Decomposed spectrum in the $i^{th}$ iteration $(1 \times m)$
+\end{itemize}
+
+To simplify this, somewhat, let:
+\begin{align}
+r_{\mu} & = \sum\limits_{j}R_{\mu{},j} \\
+c & = f^{(s)T}\times{}R\\
+m_i &= \frac{d_i}{c_i}\\
+\rho{}_{\mu{}} & = \frac{f_{\mu}^{(s)}}{r_{\mu}}
+\end{align}
+
+Then we can rewrite the equation to:
+\begin{align}
+f_{\mu}^{(s+1)} = \rho{}_{\mu} R_{\mu}\times{}m
+\end{align}
+
+The use of this formula can then be expressed as the following two algorithms
+
+\begin{algorithm}[H]
+\caption{Decomposition algorithm for converting observed spectra into incident spectra for a given response matrix. $\odot$ is the element-wise multiplication operator and $\oslash$ is the element-wise division operator. $m$ is the number of response functions, $n$ is the number of data bins.}\label{alg_decomp}
+\begin{algorithmic}
+\Procedure{DecomposeSpectrum}{$d, R, f^{(0)}, L, \tau{}$}
+\BState \textbf{Input}:
+\State $s \gets \text{Input spectrum}$
+\State $R \gets \text{Repsonse matrix}$
+\State $f^{(0)} \gets \text{Initial decomposition guess}$
+\State $L \gets \text{Convergence Limit}$
+\State $\tau \gets \text{Value Threshold For Convergence Test}$
+\BState \textbf{Start}:
+\State $T \gets R^T$
+\State $r \gets \sum\limits_{j}R_{\mu{}j}$
+\State $d \gets \textit{False}$
+\For{$i \gets 0$; $!d$; $i \gets i+1$}
+\State $c \gets T \cdot f^{(i)}$
+\State $m \gets s \oslash c$
+\State $\Gamma \gets R \cdot m$
+\State $f^{(i+1)} \gets f^{(i)} \oslash r \odot \Gamma$
+\State $d \gets$ \Call{TestConvergence}{$f^{(i)}, f^{(i+1)}, L, \tau{}$}
+\EndFor
+\State \Return{$f^{(i+1)}$}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+Where Algorithm \ref{alg_decomp} has the following requirements for its inputs:
+\begin{itemize}
+\item $s_j \geq 0$; $\forall{}j \text{ s.t. } 0\leq{}j<n$
+\item $\sum\limits_{j=0}^{n}s_j \geq 0$
+\item $f^{(0)}_j > 0$; $\forall{}j \text{ s.t. } 0\leq{}j<m$
+\item $\sum\limits_{j=0}^{m}R_{\mu{}j}$; $\forall{}\mu \text{ s.t. } 0\leq{}\mu<n$
+\item $\sum\limits_{j=0}^{n}R_{j\mu{}}$; $\forall{}\mu \text{ s.t. } 0\leq{}\mu<m$
+\item $L > 0$
+\item $\tau > 0$
+\end{itemize}
+
+Typical values chosen for the convergence limit $L$ are in the range $[0.001, 0.005]$. Typical values chose for the convergence limit testing threshold are in the range $Min(s_j) \cdot{} [10^{-3}, 10^{-4}]$.
+
+\begin{algorithm}[H]
+\caption{Convergence testing algorithm for decomposition.}\label{alg_conv}
+\begin{algorithmic}
+\Function{TestConvergence}{$f^{(i)}, f^{(i+1)}, L, \tau{}$}
+\BState \textbf{Input}:
+\State $f^{(i)} \gets \text{Decomposition vector before iteration i}$
+\State $f^{(i+1)} \gets \text{Decomposition vector after iteration i}$
+\State $L \gets \text{Convergence Limit }$
+\State $\tau \gets \text{Value Threshold For Convergence Test}$
+\BState \textbf{Start}:
+\For{$j \gets 0$; $j<Length(f^{(i)})$; $j \gets j+1$}
+\If{$f^{(i+1)}_j > \tau$ and $f^{(i)}_j > \tau$}
+\If{ $\abs{\frac{2 \paren{f^{(i+1)}_j - f^{(i)}_j}}{f^{(i+1)}_j + f^{(i)}_j}} > L$}
+\State \Return{$\textit{False}$}
+\EndIf
+\EndIf
+\EndFor
+\State \Return{$\textit{True}$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Where Algorithm \ref{alg_conv} has the following requirements for its inputs:
+\begin{itemize}
+\item $f^{(i)}_j > 0$; $\forall{}j \text{ s.t. } 0\leq{}j<m$
+\item $f^{(i+1)}_j > 0$; $\forall{}j \text{ s.t. } 0\leq{}j<m$
+\item $L > 0$
+\item $\tau > 0$
+\end{itemize}
+
+\section{Use Cases}
+\subsection{Energy Decomposition}
+Decomposition of a detected gamma-ray energy spectrum is a straightforward use of the algorithm presented above. The spectrum observed in a detector can be expressed as a weighted sum of the detector response to bombardment by mono-energetic gamma rays. This process converts the observed spectrum in a detector into the spectrum incident upon the detector. The necessary reponses can either be measured using a tagged bremsstrahlung facility or simulated (a much easier approach). In the case of simulation one can even simulate only the energy deposition probabilities and then convolve that histogram with a function representing the detectors peak width as a function of energy (as opposed to also simulating the light or charge production of the detector and then simulating its collection.)
+\begin{align}
+	d_{i} = \sum\limits_{\alpha}f_{\alpha}\times{}R_{\alpha,i}
+\end{align}
+Where:
+\begin{itemize}
+\item $d_{i}=$ The $i^{th}$ energy bin of the input spectrum
+\item $f_{\alpha}=$ Decomposition weight for the $\alpha^{th}$ mono-energetic response function
+\item $R_{\alpha,i}=$ Observed counts at energy bin $i$ for the $\alpha^{th}$ response function, a.k.a the Response Matrix
+\end{itemize}
+
+Applying the algorithm in Section 1 yields the spectrum incident upon the detector.
+
+
+\subsection{Position Decomposition}
+The spectrum observed at a position $i$ ($d_j$) can be expressed as weighed sum of spectra from a set of sources $S_{j}$ for sources at a set of positions $\alpha$.
+\begin{align}
+	d_{j,i} = \sum\limits_{\alpha}S_{j,\alpha}\times{}W_{\alpha,i}
+\end{align}
+Where:
+\begin{itemize}
+\item $d_{j,i}=$ Energy bin $j$ of the decomposed spectrum at position $i$
+\item $S_{j,\alpha}=$ Energy bin $j$ of the source spectrum for source $\alpha$
+\item $W_{\alpha,i}=$ Contribution weight of source $\alpha$ at position $i$
+\end{itemize}
+
+The $W_{\alpha,i}$, essentially solid angle contributions, can be defined as follows:
+\begin{equation}
+	W_{\alpha,i} = \oiint\limits_{D} \oiint\limits_{S} \frac{SN(x_s, x_d)\cdot{}Atten(x_s, x_d)}{4\pi{} \mid{} \vec{x_d}-\vec{x_s} \mid{}^2} \dif \vec{x_s} \dif \vec{x_d}
+\end{equation}
+\begin{equation}
+	F(x_s, x_d) =
+	\begin{cases}
+		0 & \vec{N_D}(x_d)\cdot{}(\vec{x_s}-\vec{x_d}) \leq{} 0\\
+		1 & \text{otherwise}
+	\end{cases}
+\end{equation}
+Where:
+\begin{itemize}
+\item $x_s=$ Position detector to the source.
+\item $x_d=$ Position detector to the volume.
+\item $D=$ Surface of the detector segment being considered
+\item $S=$ Surface/Volume/Whatever of the source being considered.
+\item $\vec{N_D}(x_d)=$ Vector normal to the surface of the detector at $\vec{x_d}$, pointing outward.
+\item $Atten(x_s, x_d)=$ Function accounting for shielding attenuation between $\vec{x_s}$ and $\vec{x_d}$. This function is one if only air is between the source and detector.
+\end{itemize}
+
+Considering a single energy bin $j$ gives an equation that is equivalent to the energy decomposition equation:
+\begin{align}
+	d_{i} = \sum\limits_{\alpha}S_{\alpha}\times{}W_{\alpha,i}
+\end{align}
+Where:
+\begin{itemize}
+\item $d_{i}=$ Single energy bin of the decomposed spectrum at position $i$
+\item $S_{\alpha}=$ Single energy bin of the source spectrum for source $\alpha$
+\item $W_{\alpha,i}=$ Contribution weight of source $\alpha$ at position $i$
+\end{itemize}
+
+Therefore a set of spectra taken at multiple positions can be decomposed into contributions from a finite number of stationary sources, a single energy bin at a time, using the same solution we used for energy decomposition. By analogy, the list of weights at each position for a given source would constitute a response function, the set of bin contents for a given energy for the decomposed spectra are the input spectrum, and the set of bin contents for each source would be the ``decomposed spectrum''. Repeating this at every energy bin would build up the spectrum from each source.
+
+\end{document}
