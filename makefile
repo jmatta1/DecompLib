@@ -10,59 +10,59 @@ all:example docs
 
 .PHONY:example
 example:
-	@echo -e "\e[1m\e[32mBuilding Example and Utilities\e[0m"
+	@echo "Building Example and Utilities"
 	@make -C Example all
 
 .PHONY:docs
 docs:
-	@echo -e "\e[1m\e[32mBuilding Documentation\e[0m"
+	@echo "Building Documentation"
 	@make -C doc all
 
 .PHONY:clean
 clean:
-	@echo -e "\e[1m\e[32mCleaning Intermediates in doc Directory\e[0m"
+	@echo "Cleaning Intermediates in Doc Directory"
 	-@make -i -C doc clean
-	@echo -e "\e[1m\e[32mCleaning Intermediates in Example Directory\e[0m"
+	@echo "Cleaning Intermediates in Example Directory"
 	-@make -i -C Example clean
 
 .PHONY:cleanall
 cleanall:
-	@echo -e "\e[1m\e[32mCleaning Everything in doc Directory\e[0m"
+	@echo "Cleaning Everything in doc Directory"
 	-@make -i -C doc cleanall
-	@echo -e "\e[1m\e[32mCleaning Everything in Example Directory\e[0m"
+	@echo "Cleaning Everything in Example Directory"
 	-@make -i -C Example cleanall
 
 .PHONY:install
 install:
-	@echo -e "\e[1m\e[32mCreating Destination\e[0m"
+	@echo "Creating Destination"
 	install -b -d ${Ginstall_Location}
-	@echo -e "\e[1m\e[32mCopying Headers\e[0m"
+	@echo "Copying Headers"
 	install -b -m 644 -D ./DecompLib/*.h ${Ginstall_Location}
 
 .PHONY:uninstall
 uninstall:
-	@echo -e "\e[1m\e[91mDeleting Headers\e[0m"
+	@echo "Deleting Headers"
 	rm ${Ginstall_Location}/*.h
-	@echo -e "\e[1m\e[91mDeleting DecompLib Header Folder\e[0m"
+	@echo "Deleting DecompLib Header Folder"
 	rm -r ${Ginstall_Location}
 
 .PHONY:local_install
 local_install:
-	@echo -e "\e[1m\e[32mCreating Destination\e[0m"
+	@echo "Creating Destination"
 	install -b -d ${Linstall_Location}
-	@echo -e "\e[1m\e[32mCopying Headers\e[0m"
+	@echo "Copying Headers"
 	install -b -m 644 -D ./DecompLib/*.h ${Linstall_Location}
 
 .PHONY:local_uninstall
 local_uninstall:
-	@echo -e "\e[1m\e[91mDeleting Headers\e[0m"
+	@echo -e "Deleting Headers"
 	rm ${Linstall_Location}/*.h
-	@echo -e "\e[1m\e[91mDeleting DecompLib Header Folder\e[0m"
+	@echo -e "Deleting DecompLib Header Folder"
 	rm -r ${Linstall_Location}
 
 .PHONY:gh-pages
 gh-pages:
-	@echo -e "\e[1m\e[32mBuilding Github Pages documentation\e[0m"
+	@echo -e "Building Github Pages documentation"
 	-@rm -rf docs
 	@make -C doc doxygen
 	@mv doc/doxygen/html docs

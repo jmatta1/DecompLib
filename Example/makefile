@@ -4,27 +4,27 @@ all:csvtorootth1 csvtorootth2 decomposespectrum rootth1tocsv rootth2tocsv
 
 .PHONY:csvtorootth1
 csvtorootth1:
-	@echo -e "\e[1m\e[32mBuilding CsvToRootTh1 Utility\e[0m"
+	@echo "Building CsvToRootTh1 Utility"
 	@make -C CsvToRootTh1
 
 .PHONY:csvtorootth2
 csvtorootth2:
-	@echo -e "\e[1m\e[32mBuilding CsvToRootTh2 Utility\e[0m"
+	@echo "Building CsvToRootTh2 Utility"
 	@make -C CsvToRootTh2
 
 .PHONY:decomposespectrum
 decomposespectrum:
-	@echo -e "\e[1m\e[32mBuilding DecomposeSpectrum Example\e[0m"
+	@echo "Building DecomposeSpectrum Example"
 	@make -C DecomposeSpectrum
 
 .PHONY:rootth1tocsv
 rootth1tocsv:
-	@echo -e "\e[1m\e[32mBuilding RootTh1ToCsv Utility\e[0m"
+	@echo "Building RootTh1ToCsv Utility"
 	@make -C RootTh1ToCsv
 
 .PHONY:rootth2tocsv
 rootth2tocsv:
-	@echo -e "\e[1m\e[32mBuilding RootTh2ToCsv Utility\e[0m"
+	@echo "Building RootTh2ToCsv Utility"
 	@make -C RootTh2ToCsv
 
 .PHONY:clean
